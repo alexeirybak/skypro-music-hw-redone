@@ -10,8 +10,10 @@ export const Favourites = ({
   error,
   currentTrack,
   setCurrentTrack,
+  isPlaying,
+  setIsPlaying,
 }) => {
-  const [isPlaying, setIsPlaying] = useState(true);
+  
   const [isBar, setIsBar] = useState(false);
   const [pause, setPause] = useState(false);
   
