@@ -14,7 +14,6 @@ const App = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [music, setMusic] = useState([]);
   const [error, setError] = useState(null);
-  const [isPlaying, setIsPlaying] = useState(false);
   const [currentTrack, setCurrentTrack] = useState(null);
 
   useEffect(() => {
@@ -46,8 +45,6 @@ const App = () => {
           onAuthButtonClick={handleLogin}
           isLoading={isLoading}
           music={music}
-          isPlaying={isPlaying}
-          setIsPlaying={setIsPlaying}
           currentTrack={currentTrack}
           setCurrentTrack={setCurrentTrack}
           error={error}

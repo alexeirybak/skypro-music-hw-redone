@@ -4,7 +4,7 @@ import {
   nextTrack,
   prevTrack,
   toggleShuffled,
-} from '../../store/actions/creators/track';
+} from '../../store/actions/creators/creators';
 import { useDispatch } from 'react-redux';
 import { PlayerBtnPrevSvg } from '../../utils/iconSVG/playerBtnPrev';
 import { PlayerBtnPlaySvg } from '../../utils/iconSVG/playerBtnPlay';

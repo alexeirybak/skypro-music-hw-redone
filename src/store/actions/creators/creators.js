@@ -3,9 +3,9 @@ import {
   NEXT_TRACK,
   PREV_TRACK,
   TOGGLE_SHUFFLED,
-} from '../types/track';
+} from '../types/types';
 
-export const setCurTrack = (track) => ({
+export const setCurrentTrack = (track) => ({
   type: SET_CURRENT_TRACK,
   payload: {
     track,

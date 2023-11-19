@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import { setCurTrack } from '../../store/actions/creators/track';
+import { setCurTrack } from '../../store/actions/creators/creators';
 import { TrackPlaySvg } from '../../utils/iconSVG/trackPlay';
 import { TrackPlayLikeSvg } from '../../utils/iconSVG/trackPlayLike';
 import { TrackPlayDislikeSvg } from '../../utils/iconSVG/trackPlayDislike';
@@ -13,10 +13,9 @@ export const PlayerTrackPlay = ({
   currentTrack,
   setCurrentTrack,
 }) => {
-  
   const dispatch = useDispatch();
   const handleTrackClick = () => {
-    dispatch(setCurTrack(track));
+    dispatch(setCurrentTrack(track));
     if (currentTrack && currentTrack.id === track.id) {
       setIsPlaying(!isPlaying);
     } else {

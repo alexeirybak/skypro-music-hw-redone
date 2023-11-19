@@ -10,8 +10,9 @@ export const Main = ({
   error,
   currentTrack,
   setCurrentTrack,
+  isPlaying,
+  setIsPlaying,
 }) => {
-  const [isPlaying, setIsPlaying] = useState(false);
   const [isBar, setIsBar] = useState(false);
   const [pause, setPause] = useState(false);
   
