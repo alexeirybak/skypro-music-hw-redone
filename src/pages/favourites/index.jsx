@@ -30,17 +30,7 @@ export const Favourites = ({
           currentTrack={currentTrack}
           setCurrentTrack={setCurrentTrack}
         />
-        {isBar && (
-          <Player
-            setPause={setPause}
-            music={music}
-            isLoading={isLoading}
-            isPlaying={isPlaying}
-            setIsPlaying={setIsPlaying}
-            currentTrack={currentTrack}
-            setCurrentTrack={setCurrentTrack}
-          />
-        )}
+        
         <Footer />
       </S.Container>
     </S.Wrapper>

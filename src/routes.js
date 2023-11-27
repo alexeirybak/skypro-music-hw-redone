@@ -16,9 +16,10 @@ export const AppRoutes = ({
   currentTrack,
   setCurrentTrack,
   error,
+  setIsBar,
+  setIsPlaying,
+  isPlaying
 }) => {
-
-  const [isPlaying, setIsPlaying] = useState(false);
 
   return (
     <Routes>
@@ -27,6 +28,7 @@ export const AppRoutes = ({
           path='/'
           element={
             <Main
+              setIsBar={setIsBar}
               isLoading={isLoading}
               music={music}
               isPlaying={isPlaying}
