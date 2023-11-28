@@ -1,7 +1,6 @@
 import styled, { css, keyframes } from 'styled-components';
 
 export const PlayerTrackPlay = styled.div`
-  display: -webkit-box;
   display: flex;
   flex-direction: row;
 `;
@@ -18,7 +17,6 @@ export const TrackPlayerImage = styled.div`
   width: 51px;
   height: 51px;
   background-color: var(--title-track-img);
-  display: -webkit-box;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -100,7 +98,6 @@ export const TrackPlayAlbumLink = styled.a`
 `;
 
 export const TrackPlayLikesDisplay = styled.div`
-  display: -webkit-box;
   display: flex;
   flex-direction: row;
   align-items: center;

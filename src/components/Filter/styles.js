@@ -1,7 +1,6 @@
 import styled, { css } from 'styled-components';
 
 export const CenterBlockFilter = styled.div`
-  display: -webkit-box;
   display: flex;
   flex-direction: row;
   align-items: flex-start;

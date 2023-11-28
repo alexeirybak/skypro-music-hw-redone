@@ -4,24 +4,24 @@ import { Footer } from '../../components/Footer';
 import * as S from './styles';
 
 export const Main = ({
-  pause,
   isLoading,
+  isPlaying,
   music,
   error,
   currentTrack,
   setCurrentTrack,
   setIsPlaying,
-  setIsBar
+  setIsBar,
 }) => {
   return (
     <S.Wrapper>
       <S.Container>
         <NavTrackSidebar
-          pause={pause}
           setIsBar={setIsBar}
           isLoading={isLoading}
           music={music}
           setIsPlaying={setIsPlaying}
+          isPlaying={isPlaying}
           error={error}
           currentTrack={currentTrack}
           setCurrentTrack={setCurrentTrack}

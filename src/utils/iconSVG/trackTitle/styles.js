@@ -1,4 +1,4 @@
-import styled, { css } from 'styled-components';
+import styled, { css, keyframes } from 'styled-components';
 
 export const TrackTitleImg = styled.svg`
   width: 51px;
@@ -20,76 +20,30 @@ export const TrackTitleImg = styled.svg`
   }
 `;
 
-export const PlayingDot = styled.div`
-  left: 50%;
-  top: 50%;
-  transform: translateX(-50%) translateY(-50%);
-  width: 15px;
-  height: 15px;
-  position: relative;
-  ${({ pause, bubble_out }) =>
-    !pause &&
-    css`
-      animation: ${bubble_out} 1.25s ease-in-out infinite both;
-    `}
-  &:before {
-    content: '';
-    position: relative;
-    display: ${({ pause }) => (pause ? 'none' : 'block')};
-    width: 300%;
-    height: 300%;
-    box-sizing: border-box;
-    margin-left: -100%;
-    margin-top: -100%;
-    border-radius: 50%;
-    background-color: #01a4e9;
-    ${({ pause }) =>
-      !pause &&
-      css`
-        animation: pulse-ring 1.25s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
-      `}
-  }
-  &:after {
-    content: '';
-    position: absolute;
-    left: 0;
-    top: ${({ pause }) => (pause ? '55%' : '100%')};
-    display: block;
-    width: 100%;
-    height: 100%;
-    background-color: #b672ff;
-    border-radius: 15px;
-    box-shadow: 0 0 8px rgba(0, 0, 0, 0.3);
-    ${({ pause }) =>
-      !pause &&
-      css`
-        animation: pulse-dot 1.25s cubic-bezier(0.455, 0.03, 0.515, 0.955) -0.4s
-          infinite;
-      `}
-  }
-
-  @keyframes pulse-ring {
-    0% {
-      transform: scale(0.33);
-    }
-    80%,
-    100% {
-      opacity: 0;
-    }
-  }
-
-  @keyframes pulse-dot {
-    0% {
-      transform: scale(0.8);
+const bubble_out = keyframes`
+    0%,
+    to {
+      transform: scale(0.5);
     }
     50% {
       transform: scale(1);
     }
-    100% {
-      transform: scale(0.8);
-    }
   }
 `;
+
+const animationPaused = css`
+  animation-play-state: paused;
+`;
+
+export const PlayingDot = styled.div`
+  width: 20px;
+  height: 20px;
+  background-color: #b672ff;
+  border-radius: 10px;
+  display: block;
+  animation: ${bubble_out} 0.7s ease-in-out infinite both;
+  ${({ $isPlaying }) => !$isPlaying && animationPaused}`
+;
 
 export const TrackTitleWrapper = styled.div`
   display: inline-block;

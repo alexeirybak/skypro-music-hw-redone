@@ -1,10 +1,11 @@
 import * as S from './styles';
 
-export const TrackTitleSvg = ({ isCurrentPlaying, pause }) => {
+export const TrackTitleSvg = ({ isCurrentPlaying, isPlaying }) => {
+  console.log(isPlaying);
   return (
     <S.TrackTitleWrapper>
       {isCurrentPlaying ? (
-        <S.PlayingDot $pause={pause} />
+        <S.PlayingDot $isPlaying={isPlaying} />
       ) : (
         <S.TrackTitleImg
           xmlns='http://www.w3.org/2000/svg'

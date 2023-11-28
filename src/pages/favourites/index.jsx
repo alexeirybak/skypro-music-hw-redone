@@ -13,15 +13,11 @@ export const Favourites = ({
   isPlaying,
   setIsPlaying,
 }) => {
-  
-  const [isBar, setIsBar] = useState(false);
-  const [pause, setPause] = useState(false);
-  
+
   return (
     <S.Wrapper>
       <S.Container>
         <NavTrackSidebar
-          pause={pause}
           isLoading={isLoading}
           music={music}
           setIsPlaying={setIsPlaying}

@@ -8,7 +8,6 @@ export const PlaylistItem = styled.div`
 `;
 
 export const PlaylistTrack = styled.div`
-  display: -webkit-box;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -35,7 +34,6 @@ export const TrackTitleImage = styled.svg`
   height: 51px;
   margin-right: 16px;
   background-color: var(--title-track-img);
-  display: -webkit-box;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -100,7 +98,6 @@ export const TrackTitleLink = styled.a`
 
 export const TrackAuthor = styled.div`
   width: 321px;
-  display: -webkit-box;
   display: flex;
   justify-content: flex-start;
 `;

@@ -4,7 +4,6 @@ export const CenterBlockSearch = styled.div`
   width: 100%;
   border-bottom: 1px solid var(--center-block-search);
   margin-bottom: 51px;
-  display: -webkit-box;
   display: flex;
   flex-direction: row;
   align-items: center;

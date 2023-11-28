@@ -25,7 +25,6 @@ export const PlayerControls = ({
   setDuration,
   audioRef,
   volume,
-  setPause,
 }) => {
   const [loaded, setLoaded] = useState(false);
   const [isLoop, setIsLoop] = useState(false);
@@ -230,7 +229,6 @@ export const PlayerControls = ({
           onClick={() => {
             if (loaded) {
               setIsPlaying(!isPlaying);
-              setPause(isPlaying);
             }
           }}
         >

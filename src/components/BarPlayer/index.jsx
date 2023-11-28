@@ -9,15 +9,12 @@ export const BarPlayer = ({
   setCurrentTrack,
   isPlaying,
   setIsPlaying,
-  pause,
-  setPause,
   ...restParams
 }) => {
+ 
   return (
     <S.BarPlayer>
       <PlayerControls
-        pause={pause}
-        setPause={setPause}
         music={music}
         currentTrack={currentTrack}
         setCurrentTrack={setCurrentTrack}

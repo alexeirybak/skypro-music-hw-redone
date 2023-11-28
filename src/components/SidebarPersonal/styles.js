@@ -2,7 +2,6 @@ import styled from 'styled-components';
 import { NavLink } from 'react-router-dom';
 
 export const SidebarPersonal = styled.div`
-  display: -webkit-box;
   display: flex;
   flex-direction: row;
   align-items: center;

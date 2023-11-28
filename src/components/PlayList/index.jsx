@@ -7,11 +7,11 @@ import * as S from './styles';
 export const PlayList = ({
   isLoading,
   music,
+  isPlaying,
   setIsPlaying,
   setIsBar,
   currentTrack,
   setCurrentTrack,
-  pause,
 }) => {
   if (!isLoading) {
     music = [...Array(12)].flatMap(() => tracks);
@@ -36,7 +36,7 @@ export const PlayList = ({
               {isLoading ? (
                 <TrackTitleSvg
                   isCurrentPlaying={isCurrentPlaying}
-                  pause={pause}
+                  isPlaying={isPlaying}
                 />
               ) : (
                 <S.SkeletonIcon></S.SkeletonIcon>

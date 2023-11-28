@@ -11,8 +11,6 @@ export const Player = ({
   setCurrentTrack,
   isPlaying,
   setIsPlaying,
-  pause,
-  setPause,
 }) => {
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
@@ -53,14 +51,19 @@ export const Player = ({
             setDuration={setDuration}
             audioRef={audioRef}
             volume={volume}
-            pause={pause}
-            setPause={setPause}
           />
-          <VolumeBlock
-            audioRef={audioRef}
-            volume={volume}
-            setVolume={setVolume}
-          />
+          <S.EqVolBlock>
+            {isPlaying ? (
+              <S.Equalizer src='/img/equalizer.gif' alt='Эквалайзер' />
+            ) : (
+              <S.Equalizer src='/img/non-equalizer.png' alt='Эквалайзер' />
+            )}
+            <VolumeBlock
+              audioRef={audioRef}
+              volume={volume}
+              setVolume={setVolume}
+            />
+          </S.EqVolBlock>
         </S.BarPlayerBlock>
       </S.BarContent>
     </S.Bar>

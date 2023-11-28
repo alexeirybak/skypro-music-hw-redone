@@ -21,7 +21,6 @@ export const NavBurger = styled.div`
   height: 36px;
   padding: 13px 0;
   margin-bottom: 20px;
-  display: -webkit-box;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
