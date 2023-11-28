@@ -18,6 +18,7 @@ const App = () => {
   const [currentTrack, setCurrentTrack] = useState(null);
   const [isBar, setIsBar] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
+  const [pause, setPause] = useState(false);
 
   useEffect(() => {
     async function fetchTracks() {
@@ -26,13 +27,9 @@ const App = () => {
         setMusic(tracks);
         setIsLoading(true);
         setError(false);
-        setIsBar(false);
       } catch (error) {
         setIsLoading(true);
         setError(error.message);
-        setIsBar(false);
-      } finally {
-        setIsBar(true);
       }
     }
     fetchTracks();
