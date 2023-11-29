@@ -1,11 +1,12 @@
 import { useState, useEffect } from 'react';
 import { getTrackById } from '../../api/apiGetTracks';
 import {
+  activeTrackSelector,
   nextTrack,
   prevTrack,
   toggleShuffled,
 } from '../../store/actions/creators/creators';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { PlayerBtnPrevSvg } from '../../utils/iconSVG/playerBtnPrev';
 import { PlayerBtnPlaySvg } from '../../utils/iconSVG/playerBtnPlay';
 import { PlayerBtnPauseSvg } from '../../utils/iconSVG/playerBtnPause';
@@ -16,8 +17,6 @@ import * as S from './styles';
 
 export const PlayerControls = ({
   music,
-  currentTrack,
-  setCurrentTrack,
   trackId,
   isPlaying,
   setIsPlaying,
@@ -34,6 +33,10 @@ export const PlayerControls = ({
   const [shuffledIndex, setShuffledIndex] = useState(0);
   const [shuffleTrackEnable, setShuffleTrackEnable] = useState(false);
   const [trackHistory, setTrackHistory] = useState([]);
+
+  const getTrack = useSelector(activeTrackSelector);
+  const currentTrack = getTrack.payload.track.tracks.currentTrack;
+  console.log(getTrack);
 
   useEffect(() => {
     const newIndex = shuffleTrackEnable
@@ -126,7 +129,7 @@ export const PlayerControls = ({
     setTrackHistory((prevHistory) => [...prevHistory, currentTrack]);
 
     const nextMusic = music[nextIndex];
-    setCurrentTrack(nextMusic);
+    activeTrackSelector(nextMusic);
 
     dispatch(nextTrack(nextMusic));
     setLoaded(false);
@@ -144,7 +147,7 @@ export const PlayerControls = ({
     if (trackHistory.length > 0) {
       const prevMusic = trackHistory.pop();
       setTrackHistory((prevHistory) => [...prevHistory]);
-      setCurrentTrack(prevMusic);
+      activeTrackSelector(prevMusic);
       dispatch(prevTrack(prevMusic));
       setLoaded(false);
     } else {
@@ -165,7 +168,7 @@ export const PlayerControls = ({
       const prevMusic = shuffleTrackEnable
         ? shuffledTracks[prevIndex]
         : music[prevIndex];
-      setCurrentTrack(prevMusic);
+      activeTrackSelector(prevMusic);
 
       dispatch(prevTrack(prevMusic));
       setLoaded(false);

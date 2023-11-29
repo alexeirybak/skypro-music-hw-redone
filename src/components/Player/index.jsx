@@ -7,8 +7,6 @@ import * as S from './styles';
 export const Player = ({
   music,
   isLoading,
-  currentTrack,
-  setCurrentTrack,
   isPlaying,
   setIsPlaying,
 }) => {
@@ -28,8 +26,6 @@ export const Player = ({
     <S.Bar>
       <S.BarContent>
         <ProgressBar
-          currentTrack={currentTrack}
-          setCurrentTrack={setCurrentTrack}
           currentTime={currentTime}
           setCurrentTime={setCurrentTime}
           duration={duration}
@@ -41,8 +37,6 @@ export const Player = ({
           <BarPlayer
             music={music}
             isLoading={isLoading}
-            currentTrack={currentTrack}
-            setCurrentTrack={setCurrentTrack}
             isPlaying={isPlaying}
             setIsPlaying={setIsPlaying}
             currentTime={currentTime}

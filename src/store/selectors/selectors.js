@@ -2,7 +2,8 @@ export const trackSelector = (store) => store.audioplayer;
 
 export const trackIdsSelector = (store) => trackSelector(store)?.id || [];
 
-export const trackCurrentTrack = (store) => store.audioplayer.track;
+export const activeTrackSelector = (store) =>
+  trackSelector(store)?.activeTrack || [];
 
 export const trackByIdSelector = (store, id) => {
   const trackStore = trackSelector(store);

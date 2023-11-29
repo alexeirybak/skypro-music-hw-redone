@@ -13,14 +13,11 @@ export const AppRoutes = ({
   onAuthButtonClick,
   isLoading,
   music,
-  currentTrack,
-  setCurrentTrack,
   error,
   setIsBar,
   setIsPlaying,
-  isPlaying
+  isPlaying,
 }) => {
-
   return (
     <Routes>
       <Route element={<ProtectedRoute isAllowed={user} />}>
@@ -33,8 +30,6 @@ export const AppRoutes = ({
               music={music}
               isPlaying={isPlaying}
               setIsPlaying={setIsPlaying}
-              currentTrack={currentTrack}
-              setCurrentTrack={setCurrentTrack}
               error={error}
             />
           }
@@ -43,12 +38,11 @@ export const AppRoutes = ({
           path='/favourites'
           element={
             <Favourites
+              setIsBar={setIsBar}
               isLoading={isLoading}
               music={music}
               isPlaying={isPlaying}
               setIsPlaying={setIsPlaying}
-              currentTrack={currentTrack}
-              setCurrentTrack={setCurrentTrack}
               error={error}
             />
           }

@@ -1,3 +1,5 @@
+import { useDispatch, useSelector } from 'react-redux';
+import { activeTrackSelector } from '../../store/actions/creators/creators';
 import { durationFormatter } from '../../utils/durationFormatter';
 import { tracks } from '../../constants';
 import { TrackTitleSvg } from '../../utils/iconSVG/trackTitle';
@@ -9,16 +11,18 @@ export const PlayList = ({
   music,
   isPlaying,
   setIsPlaying,
-  setIsBar,
-  currentTrack,
-  setCurrentTrack,
+  setIsBar
 }) => {
   if (!isLoading) {
     music = [...Array(12)].flatMap(() => tracks);
   }
 
+  const dispatch = useDispatch();
+  const getTrack = useSelector(activeTrackSelector);
+  const currentTrack = getTrack.payload.track.tracks.currentTrack;
+
   const handleTrackClick = (item) => {
-    setCurrentTrack(item);
+    dispatch(activeTrackSelector(item));
     setIsPlaying(true);
     setIsBar(true);
   };

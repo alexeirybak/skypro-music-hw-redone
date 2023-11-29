@@ -14,12 +14,12 @@ const initialState = {
 
 export default function trackReducer(state = initialState, action) {
   switch (action.type) {
+    
     case SET_CURRENT_TRACK: {
       const { track } = action.payload;
       return {
         ...state,
         currentTrack: track,
-        playing: true,
       };
     }
 

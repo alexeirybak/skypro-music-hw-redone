@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { NavTrackSidebar } from '../../components/NavTrackSidebar';
-import { Player } from '../../components/Player';
 import { Footer } from '../../components/Footer';
 import * as S from './styles';
 
@@ -8,10 +7,9 @@ export const Favourites = ({
   isLoading,
   music,
   error,
-  currentTrack,
-  setCurrentTrack,
   isPlaying,
   setIsPlaying,
+  setIsBar
 }) => {
 
   return (
@@ -20,13 +18,11 @@ export const Favourites = ({
         <NavTrackSidebar
           isLoading={isLoading}
           music={music}
+          isPlaying={isPlaying}
           setIsPlaying={setIsPlaying}
           setIsBar={setIsBar}
           error={error}
-          currentTrack={currentTrack}
-          setCurrentTrack={setCurrentTrack}
         />
-        
         <Footer />
       </S.Container>
     </S.Wrapper>

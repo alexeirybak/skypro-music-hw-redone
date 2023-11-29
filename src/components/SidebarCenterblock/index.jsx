@@ -11,9 +11,8 @@ export const SidebarCenterBlock = ({
   isPlaying,
   setIsPlaying,
   setIsBar,
-  currentTrack,
-  setCurrentTrack,
 }) => {
+  
   return (
     <S.MainCenterBlock>
       <Search />
@@ -42,8 +41,6 @@ export const SidebarCenterBlock = ({
             isPlaying={isPlaying}
             setIsPlaying={setIsPlaying}
             setIsBar={setIsBar}
-            currentTrack={currentTrack}
-            setCurrentTrack={setCurrentTrack}
           />
         )}
       </S.CenterBlockContent>

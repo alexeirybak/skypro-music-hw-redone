@@ -5,8 +5,6 @@ import * as S from './styles';
 export const BarPlayer = ({
   music,
   isLoading,
-  currentTrack,
-  setCurrentTrack,
   isPlaying,
   setIsPlaying,
   ...restParams
@@ -16,8 +14,6 @@ export const BarPlayer = ({
     <S.BarPlayer>
       <PlayerControls
         music={music}
-        currentTrack={currentTrack}
-        setCurrentTrack={setCurrentTrack}
         isPlaying={isPlaying}
         setIsPlaying={setIsPlaying}
         {...restParams}
@@ -25,8 +21,6 @@ export const BarPlayer = ({
       <PlayerTrackPlay
         music={music}
         isLoading={isLoading}
-        currentTrack={currentTrack}
-        setCurrentTrack={setCurrentTrack}
         isPlaying={isPlaying}
         setIsPlaying={setIsPlaying}
       />

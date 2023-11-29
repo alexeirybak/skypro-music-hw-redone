@@ -8,8 +8,6 @@ export const Main = ({
   isPlaying,
   music,
   error,
-  currentTrack,
-  setCurrentTrack,
   setIsPlaying,
   setIsBar,
 }) => {
@@ -23,8 +21,6 @@ export const Main = ({
           setIsPlaying={setIsPlaying}
           isPlaying={isPlaying}
           error={error}
-          currentTrack={currentTrack}
-          setCurrentTrack={setCurrentTrack}
         />
         <Footer />
       </S.Container>

@@ -10,9 +10,8 @@ export const NavTrackSidebar = ({
   isPlaying,
   setIsPlaying,
   setIsBar,
-  currentTrack,
-  setCurrentTrack,
 }) => {
+  
   return (
     <S.NavTrackSidebar>
       <Nav />
@@ -22,8 +21,6 @@ export const NavTrackSidebar = ({
         isPlaying={isPlaying}
         setIsPlaying={setIsPlaying}
         setIsBar={setIsBar}
-        currentTrack={currentTrack}
-        setCurrentTrack={setCurrentTrack}
         error={error}
       />
       <MainSidebar isLoading={isLoading} />

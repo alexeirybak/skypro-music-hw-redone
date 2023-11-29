@@ -5,7 +5,7 @@ import {
   TOGGLE_SHUFFLED,
 } from '../types/types';
 
-export const setCurrentTrack = (track) => ({
+export const activeTrackSelector = (track) => ({
   type: SET_CURRENT_TRACK,
   payload: {
     track,

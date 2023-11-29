@@ -1,7 +1,6 @@
 import * as S from './styles';
 
 export const TrackTitleSvg = ({ isCurrentPlaying, isPlaying }) => {
-  console.log(isPlaying);
   return (
     <S.TrackTitleWrapper>
       {isCurrentPlaying ? (
