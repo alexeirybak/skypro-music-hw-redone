@@ -36,7 +36,6 @@ export const PlayerControls = ({
 
   const getTrack = useSelector(activeTrackSelector);
   const currentTrack = getTrack.payload.track.tracks.currentTrack;
-  console.log(getTrack);
 
   useEffect(() => {
     const newIndex = shuffleTrackEnable

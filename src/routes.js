@@ -7,9 +7,10 @@ import { Favourites } from './pages/favourites';
 import { Category } from './pages/category';
 import { NotFound } from './pages/not-found';
 import { ProtectedRoute } from './components/ProtectedRoute';
+import { useContext} from 'react';
+import { UserContext } from './contexts/UserContext';
 
 export const AppRoutes = ({
-  user,
   onAuthButtonClick,
   isLoading,
   music,
@@ -18,6 +19,7 @@ export const AppRoutes = ({
   setIsPlaying,
   isPlaying,
 }) => {
+  const { user } = useContext(UserContext);
   return (
     <Routes>
       <Route element={<ProtectedRoute isAllowed={user} />}>

@@ -1,7 +1,7 @@
 import { useEffect, useState, useContext } from 'react';
 import { UserContext } from '../../contexts/UserContext';
 import { Link } from 'react-router-dom';
-import { LogUser } from '../../api/authApi';
+import { LogUser, getToken } from '../../api/authApi';
 import { useNavigate } from 'react-router-dom';
 import * as S from './styles';
 
@@ -10,24 +10,25 @@ export function LogPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [primaryButton, setPrimaryButton] = useState(false);
-  const [isLoginMode, setIsLoginMode] = useState(false);
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const isLoginModeFromStorage = JSON.parse(
-      localStorage.getItem('isLoginMode'),
-    );
-    setIsLoginMode(isLoginModeFromStorage || false);
-  }, []);
+  const validateInput = () => {
+    if (!email) throw new Error('Не введена почта');
+    if (!password) throw new Error('Не введен пароль');
+  };
 
   const { setUser } = useContext(UserContext);
 
   const handleLogin = async () => {
     try {
-      const result = await LogUser(email, password);
+      validateInput();
       setPrimaryButton(true);
-      setUser(result.username);
-      localStorage.setItem('user', JSON.stringify(result.username));
+      const newUser = await LogUser({ email, password });
+      const newToken = await getToken({ email, password });
+      setUser(newUser);
+      localStorage.setItem('user', JSON.stringify(newUser));
+      localStorage.setItem('tokenRefresh', JSON.stringify(newToken.refresh));
+      localStorage.setItem('tokenAccess', JSON.stringify(newToken.access));
       navigate('/');
     } catch (error) {
       setError(error.message);
@@ -44,7 +45,7 @@ export function LogPage() {
 
   useEffect(() => {
     setError(null);
-  }, [isLoginMode, email, password]);
+  }, [email, password]);
 
   return (
     <S.PageContainer>

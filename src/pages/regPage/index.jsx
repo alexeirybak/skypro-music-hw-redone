@@ -11,15 +11,7 @@ export function RegPage() {
   const [password, setPassword] = useState('');
   const [repeatPassword, setRepeatPassword] = useState('');
   const [primaryButton, setPrimaryButton] = useState(false);
-  const [isLoginMode, setIsLoginMode] = useState(false);
   const navigate = useNavigate();
-
-  useEffect(() => {
-    const isLoginModeFromStorage = JSON.parse(
-      localStorage.getItem('isLoginMode'),
-    );
-    setIsLoginMode(isLoginModeFromStorage || false);
-  }, []);
 
   const { setUser } = useContext(UserContext);
 
@@ -32,7 +24,6 @@ export function RegPage() {
         setPrimaryButton(true);
         setUser(result.username);
         localStorage.setItem('user', JSON.stringify(result.username));
-        setIsLoginMode(true);
         navigate('/');
       } catch (error) {
         setError(error.message);
@@ -50,7 +41,7 @@ export function RegPage() {
 
   useEffect(() => {
     setError(null);
-  }, [isLoginMode, email, password, repeatPassword]);
+  }, [email, password, repeatPassword]);
 
   return (
     <S.PageContainer>

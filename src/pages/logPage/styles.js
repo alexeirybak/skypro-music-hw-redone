@@ -72,6 +72,7 @@ const Button = styled.button`
 
 export const PrimaryButton = styled(Button)`
   color: #ffffff;
+  cursor: pointer;
   background-color: #580ea2;
   &:hover {
     background-color: #3f007d;
@@ -83,6 +84,7 @@ export const PrimaryButton = styled(Button)`
 `;
 export const SecondaryButton = styled(Button)`
   color: #000000;
+  cursor: pointer;
   background-color: transparent;
   border: 1px solid #d0cece;
 

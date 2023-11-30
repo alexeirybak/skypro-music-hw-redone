@@ -1,5 +1,7 @@
+const apiAddress = 'https://skypro-music-api.skyeng.tech';
+
 export async function RegUser(email, password) {
-  return fetch('https://skypro-music-api.skyeng.tech/user/signup/', {
+  return fetch(`${apiAddress}/user/signup/`, {
     method: 'POST',
     body: JSON.stringify({
       email,
@@ -13,16 +15,16 @@ export async function RegUser(email, password) {
     .then(async (response) => {
       if (response.status === 400) {
         const errorResponse = await response.json();
-          if (errorResponse.username) {
-              throw new Error(errorResponse.username);
-          }
-          if (errorResponse.email) {
-              throw new Error(errorResponse.email);
-          }
-          if (errorResponse.password) {
-              throw new Error(errorResponse.password);
-          }
-          throw new Error('Произошла неизвестная ошибка.');
+        if (errorResponse.username) {
+          throw new Error(errorResponse.username);
+        }
+        if (errorResponse.email) {
+          throw new Error(errorResponse.email);
+        }
+        if (errorResponse.password) {
+          throw new Error(errorResponse.password);
+        }
+        throw new Error('Произошла неизвестная ошибка.');
       }
       return response.json();
     })
@@ -31,8 +33,8 @@ export async function RegUser(email, password) {
     });
 }
 
-export async function LogUser(email, password) {
-  return fetch('https://skypro-music-api.skyeng.tech/user/login/', {
+export async function LogUser({ email, password }) {
+  return fetch(`${apiAddress}/user/login/`, {
     method: 'POST',
     body: JSON.stringify({
       email,
@@ -51,7 +53,7 @@ export async function LogUser(email, password) {
           if (errorResponse.password) {
             throw new Error(errorResponse.password);
           }
-          throw new Error('Произошла неизвестная ошибка.');
+          throw new Error('Произошла неизвестная ошибка');
         });
       } else if (response.status === 401) {
         return response.json().then((errorResponse) => {
@@ -64,4 +66,31 @@ export async function LogUser(email, password) {
     .catch((error) => {
       throw error;
     });
+}
+
+export async function getToken({ email, password }) {
+  const response = await fetch(`${apiAddress}/user/token/`, {
+    method: 'POST',
+    body: JSON.stringify({
+      email,
+      password,
+    }),
+    headers: {
+      'content-type': 'application/json',
+    },
+  });
+  return await response.json();
+}
+
+export async function refreshToken(token) {
+  const response = await fetch(`${apiAddress}/user/token/refresh/`, {
+    method: 'POST',
+    body: JSON.stringify({
+      refresh: token,
+    }),
+    headers: {
+      'content-type': 'application/json',
+    },
+  });
+  return await response.json();
 }

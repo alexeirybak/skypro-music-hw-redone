@@ -10,7 +10,7 @@ setTheme();
 
 const App = () => {
   const [user, setUser] = useState(
-    JSON.parse(localStorage.getItem('user')) || null,
+    JSON.parse(localStorage.getItem('user')),
   );
   const [isLoading, setIsLoading] = useState(false);
   const [music, setMusic] = useState([]);
@@ -33,18 +33,11 @@ const App = () => {
     fetchTracks();
   }, []);
 
-  const handleLogin = () => {
-    localStorage.setItem('user', 'true');
-    setUser(true);
-  };
-
   return (
     <>
       <GlobalStyle />
       <UserContext.Provider value={{ user, setUser }}>
         <AppRoutes
-          user={user}
-          onAuthButtonClick={handleLogin}
           isLoading={isLoading}
           music={music}
           error={error}
