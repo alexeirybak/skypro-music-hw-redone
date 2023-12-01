@@ -72,7 +72,7 @@ export const PlayerControls = ({
     async function fetchTrack() {
       try {
         const track = await getTrackById(trackId);
-        setCurrentTrack(track);
+        activeTrackSelector(track);
       } catch (error) {
         console.error(error);
       }
@@ -86,9 +86,13 @@ export const PlayerControls = ({
 
   useEffect(() => {
     if (isPlaying) {
-      audioRef.current.play();
+      if (audioRef.current.readyState === 4) {
+        audioRef.current.play();
+      }
     } else {
-      audioRef.current.pause();
+      if (audioRef.current.readyState === 4) {
+        audioRef.current.pause();
+      }
     }
   }, [isPlaying, currentTrack.track_file, audioRef]);
 
