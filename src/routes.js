@@ -13,8 +13,7 @@ import { UserContext } from './contexts/UserContext';
 export const AppRoutes = ({
   onAuthButtonClick,
   isLoading,
-  music,
-  error,
+  setIsLoading,
   setIsBar,
   setIsPlaying,
   isPlaying,
@@ -29,10 +28,9 @@ export const AppRoutes = ({
             <Main
               setIsBar={setIsBar}
               isLoading={isLoading}
-              music={music}
+              setIsLoading={setIsLoading}
               isPlaying={isPlaying}
               setIsPlaying={setIsPlaying}
-              error={error}
             />
           }
         />
@@ -42,10 +40,9 @@ export const AppRoutes = ({
             <Favourites
               setIsBar={setIsBar}
               isLoading={isLoading}
-              music={music}
+              setIsLoading={setIsLoading}
               isPlaying={isPlaying}
               setIsPlaying={setIsPlaying}
-              error={error}
             />
           }
         />

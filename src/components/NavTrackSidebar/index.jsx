@@ -5,23 +5,20 @@ import * as S from './styles.js';
 
 export const NavTrackSidebar = ({
   isLoading,
-  music,
-  error,
+  setIsLoading,
   isPlaying,
   setIsPlaying,
   setIsBar,
 }) => {
-  
   return (
     <S.NavTrackSidebar>
       <Nav />
       <SidebarCenterBlock
         isLoading={isLoading}
-        music={music}
+        setIsLoading={setIsLoading}
         isPlaying={isPlaying}
         setIsPlaying={setIsPlaying}
         setIsBar={setIsBar}
-        error={error}
       />
       <MainSidebar isLoading={isLoading} />
     </S.NavTrackSidebar>

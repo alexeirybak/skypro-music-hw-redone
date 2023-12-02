@@ -1,23 +1,45 @@
+import { useState, useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+import { getAllTracks } from '../../api/apiGetTracks';
 import { PlayList } from '../PlayList';
 import { Filter } from '../Filter';
 import { Search } from '../Search';
 import { PlayListTitleSvg } from '../../utils/iconSVG/playerListTitle';
 import * as S from './styles';
+import { setAllTracks } from '../../store/actions/creators/creators';
 
 export const SidebarCenterBlock = ({
-  isLoading,
-  music,
-  error,
   isPlaying,
   setIsPlaying,
   setIsBar,
+  isLoading,
+  setIsLoading,
 }) => {
-  
+  const [error, setError] = useState(null);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    async function fetchTracks() {
+      try {
+        const tracks = await getAllTracks();
+        dispatch(setAllTracks(tracks));
+        setIsLoading(true);
+        setError(false);
+      } catch (error) {
+        setIsLoading(false);
+        setError(error.message);
+      } finally {
+        setIsLoading(false);
+      }
+    }
+    fetchTracks();
+  }, [dispatch]);
+
   return (
     <S.MainCenterBlock>
       <Search />
       <S.CenterBlockH2>Треки</S.CenterBlockH2>
-      <Filter music={music} error={error} />
+      <Filter error={error} />
       <S.CenterBlockContent>
         <S.ContentTitle>
           <S.Col01>Трек</S.Col01>
@@ -37,7 +59,6 @@ export const SidebarCenterBlock = ({
         ) : (
           <PlayList
             isLoading={isLoading}
-            music={music}
             isPlaying={isPlaying}
             setIsPlaying={setIsPlaying}
             setIsBar={setIsBar}

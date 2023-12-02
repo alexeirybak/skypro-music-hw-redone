@@ -8,7 +8,7 @@ export const SidebarPlayLists = ({ isLoading }) => {
       <S.SidebarList>
         {musicCategory.map((category) => (
           <S.SidebarItem key={category.id}>
-            {isLoading ? (
+            {!isLoading ? (
               <NavLink to={`/category/${category.id}`}>
                 <S.SidebarImg src={category.imgUrl} alt={category.alt} />
               </NavLink>

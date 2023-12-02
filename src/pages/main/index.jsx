@@ -1,13 +1,11 @@
-import { useState } from 'react';
 import { NavTrackSidebar } from '../../components/NavTrackSidebar';
 import { Footer } from '../../components/Footer';
 import * as S from './styles';
 
 export const Main = ({
   isLoading,
+  setIsLoading,
   isPlaying,
-  music,
-  error,
   setIsPlaying,
   setIsBar,
 }) => {
@@ -17,10 +15,9 @@ export const Main = ({
         <NavTrackSidebar
           setIsBar={setIsBar}
           isLoading={isLoading}
-          music={music}
+          setIsLoading={setIsLoading}
           setIsPlaying={setIsPlaying}
           isPlaying={isPlaying}
-          error={error}
         />
         <Footer />
       </S.Container>

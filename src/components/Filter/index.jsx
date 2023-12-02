@@ -1,8 +1,12 @@
 import { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { setAllTracks } from '../../store/actions/creators/creators';
 import { releaseDateFormatter } from '../../utils/releaseDateFormatter';
 import * as S from './styles';
 
-export const Filter = ({ isLoading, error, music }) => {
+export const Filter = ({ isLoading, error }) => {
+  const allTracks = useSelector(setAllTracks);
+  let music = allTracks.payload.tracks.tracks.allTracks;
   const formattedAuthorList = [
     ...new Set(
       music.map((item) => (item.author === '-' ? 'Неизвестный' : item.author)),
@@ -22,7 +26,7 @@ export const Filter = ({ isLoading, error, music }) => {
   return (
     <S.CenterBlockFilter>
       <S.FilterTitle>Искать по:</S.FilterTitle>
-      <S.FilterList>
+      <S.FilterList onMouseLeave={() => setOpenMenu('')}>
         <S.FilterButton
           as={openMenu === 'author' && S.BtnTextActive}
           onClick={() => toggleMenu('author')}
@@ -47,7 +51,7 @@ export const Filter = ({ isLoading, error, music }) => {
           </S.FilterBlock>
         </S.FilterContent>
       </S.FilterList>
-      <S.FilterList>
+      <S.FilterList onMouseLeave={() => setOpenMenu('')}>
         <S.FilterButton
           as={openMenu === 'year' && S.BtnTextActive}
           onClick={() => toggleMenu('year')}
@@ -72,7 +76,7 @@ export const Filter = ({ isLoading, error, music }) => {
           </S.FilterBlock>
         </S.FilterContentYear>
       </S.FilterList>
-      <S.FilterList>
+      <S.FilterList onMouseLeave={() => setOpenMenu('')}>
         <S.FilterButton
           as={openMenu === 'genre' && S.BtnTextActive}
           onClick={() => toggleMenu('genre')}

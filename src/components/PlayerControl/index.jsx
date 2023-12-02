@@ -5,6 +5,7 @@ import {
   nextTrack,
   prevTrack,
   toggleShuffled,
+  setAllTracks,
 } from '../../store/actions/creators/creators';
 import { useDispatch, useSelector } from 'react-redux';
 import { PlayerBtnPrevSvg } from '../../utils/iconSVG/playerBtnPrev';
@@ -16,14 +17,13 @@ import { PlayerBtnShuffleSvg } from '../../utils/iconSVG/playerBtnShuffle';
 import * as S from './styles';
 
 export const PlayerControls = ({
-  music,
   trackId,
   isPlaying,
   setIsPlaying,
   setCurrentTime,
   setDuration,
   audioRef,
-  volume,
+  volume
 }) => {
   const [loaded, setLoaded] = useState(false);
   const [isLoop, setIsLoop] = useState(false);
@@ -33,8 +33,9 @@ export const PlayerControls = ({
   const [shuffledIndex, setShuffledIndex] = useState(0);
   const [shuffleTrackEnable, setShuffleTrackEnable] = useState(false);
   const [trackHistory, setTrackHistory] = useState([]);
-
   const getTrack = useSelector(activeTrackSelector);
+  const allTracks = useSelector(setAllTracks);
+  let music = allTracks.payload.tracks.tracks.allTracks;
   const currentTrack = getTrack.payload.track.tracks.currentTrack;
 
   useEffect(() => {

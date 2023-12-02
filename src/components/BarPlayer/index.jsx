@@ -3,7 +3,6 @@ import { PlayerTrackPlay } from '../PlayerTrackPlay';
 import * as S from './styles';
 
 export const BarPlayer = ({
-  music,
   isLoading,
   isPlaying,
   setIsPlaying,
@@ -13,13 +12,11 @@ export const BarPlayer = ({
   return (
     <S.BarPlayer>
       <PlayerControls
-        music={music}
         isPlaying={isPlaying}
         setIsPlaying={setIsPlaying}
         {...restParams}
       />
       <PlayerTrackPlay
-        music={music}
         isLoading={isLoading}
         isPlaying={isPlaying}
         setIsPlaying={setIsPlaying}

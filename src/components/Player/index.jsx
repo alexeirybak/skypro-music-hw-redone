@@ -5,7 +5,6 @@ import { VolumeBlock } from '../VolumeBlock';
 import * as S from './styles';
 
 export const Player = ({
-  music,
   isLoading,
   isPlaying,
   setIsPlaying,
@@ -35,7 +34,6 @@ export const Player = ({
         />
         <S.BarPlayerBlock>
           <BarPlayer
-            music={music}
             isLoading={isLoading}
             isPlaying={isPlaying}
             setIsPlaying={setIsPlaying}

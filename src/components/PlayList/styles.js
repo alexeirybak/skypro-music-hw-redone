@@ -144,3 +144,9 @@ export const ContentPlayList = styled.div`
   flex-direction: column;
   overflow-y: auto;
 `;
+
+export const LikeButton = styled.button`
+  background-color: var(--container);
+  border: none;
+  cursor: pointer;
+`;

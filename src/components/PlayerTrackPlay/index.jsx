@@ -17,7 +17,7 @@ export const PlayerTrackPlay = ({ isLoading, isPlaying, setIsPlaying }) => {
   return (
     <S.PlayerTrackPlay>
       <S.TrackPlayerContain>
-        {isLoading ? (
+        {!isLoading ? (
           <S.TrackPlayerImage>
             <S.TrackPlayerBlock>
               <TrackPlaySvg />
@@ -26,14 +26,14 @@ export const PlayerTrackPlay = ({ isLoading, isPlaying, setIsPlaying }) => {
         ) : (
           <S.SkeletonIcon></S.SkeletonIcon>
         )}
-        {isLoading ? (
+        {!isLoading ? (
           <S.TrackPlayAuthor>
             <S.TrackPlayAuthorLink>{currentTrack.name}</S.TrackPlayAuthorLink>
           </S.TrackPlayAuthor>
         ) : (
           <S.SceletonAuthor></S.SceletonAuthor>
         )}
-        {isLoading ? (
+        {!isLoading ? (
           <S.TrackPlayAlbum>
             <S.TrackPlayAlbumLink>
               {currentTrack.author === '-'

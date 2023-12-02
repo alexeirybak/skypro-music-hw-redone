@@ -38,7 +38,7 @@ export async function addLike({ token, id }) {
       Authorization: `Bearer ${token}`,
     },
   });
-  if (response.status === 401) throw new Error("Токен протух");
+  
   return await response.json();
 }
 

@@ -1,5 +1,11 @@
+import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useContext } from 'react';
+import { UserContext } from '../../contexts/UserContext';
 import { activeTrackSelector } from '../../store/actions/creators/creators';
+import { addLike, disLike, getAllTracks } from '../../api/apiGetTracks';
+import { setAllTracks } from '../../store/actions/creators/creators';
+import { refreshToken } from '../../api/authApi';
 import { durationFormatter } from '../../utils/durationFormatter';
 import { tracks } from '../../constants';
 import { TrackTitleSvg } from '../../utils/iconSVG/trackTitle';
@@ -7,24 +13,59 @@ import { TrackTimeSvg } from '../../utils/iconSVG/trackTime';
 import * as S from './styles';
 
 export const PlayList = ({
-  isLoading,
-  music,
   isPlaying,
   setIsPlaying,
-  setIsBar
+  setIsBar,
+  isLoading 
 }) => {
-  if (!isLoading) {
-    music = [...Array(12)].flatMap(() => tracks);
-  }
-
+  const { user } = useContext(UserContext);
+  const [disabled, setDisabled] = useState(false);
   const dispatch = useDispatch();
   const getTrack = useSelector(activeTrackSelector);
   const currentTrack = getTrack.payload.track.tracks.currentTrack;
+  const tokenRefresh = JSON.parse(localStorage.getItem('tokenRefresh'));
+  const tokenAccess = JSON.parse(localStorage.getItem('tokenAccess'));
+  const allTracks = useSelector(setAllTracks);
+  let music = allTracks.payload.tracks.tracks.allTracks;
+  
+  if (isLoading) {
+    music = [...Array(12)].flatMap(() => tracks);
+  }
 
   const handleTrackClick = (item) => {
     dispatch(activeTrackSelector(item));
     setIsPlaying(true);
     setIsBar(true);
+  };
+
+  const toggleLike = async (item) => {
+    try {
+      setDisabled(true);
+      if (item.stared_user.find((el) => el.id === user.id)) {
+        await disLike({ token: tokenAccess, id: item.id });
+      } else {
+        await addLike({ token: tokenAccess, id: item.id });
+      }
+      const music = await getAllTracks();
+
+      // dispatch(getAllTracks(response));
+    } catch (error) {
+      if (error.message === 'Токен протух') {
+        console.log(error.message);
+        const newAccess = await refreshToken(tokenRefresh);
+        localStorage.setItem('tokenAccess', JSON.stringify(newAccess));
+        if (item.stared_user.find((el) => el.id === user.id)) {
+          await disLike({ token: newAccess.access, id: item.id });
+        } else {
+          await addLike({ token: newAccess.access, id: item.id });
+        }
+        const response = await getAllTracks();
+        // dispatch(getAllTracks(response));
+        return;
+      }
+    } finally {
+      setDisabled(false);
+    }
   };
 
   const fullPlayList = music.map((item, i) => {
@@ -33,11 +74,11 @@ export const PlayList = ({
     const isCurrentPlaying = currentTrack && item.id === currentTrack.id;
 
     return (
-      <S.PlaylistItem key={i} onClick={() => handleTrackClick(item)}>
+      <S.PlaylistItem key={i}>
         <S.PlaylistTrack>
           <S.TrackTitle>
-            <S.TrackTitleComponent>
-              {isLoading ? (
+            <S.TrackTitleComponent onClick={() => handleTrackClick(item)}>
+              {!isLoading ? (
                 <TrackTitleSvg
                   isCurrentPlaying={isCurrentPlaying}
                   isPlaying={isPlaying}
@@ -46,8 +87,9 @@ export const PlayList = ({
                 <S.SkeletonIcon></S.SkeletonIcon>
               )}
             </S.TrackTitleComponent>
-            <S.TrackTitleBlock>
-              {isLoading ? (
+
+            <S.TrackTitleBlock onClick={() => handleTrackClick(item)}>
+              {!isLoading ? (
                 <S.TrackTitleLink>{name}</S.TrackTitleLink>
               ) : (
                 <S.SkeletonTrackTitle></S.SkeletonTrackTitle>
@@ -56,21 +98,23 @@ export const PlayList = ({
           </S.TrackTitle>
 
           <S.TrackAuthor>
-            {isLoading ? (
+            {!isLoading ? (
               <S.TrackAuthorLink>{updatedAuthor}</S.TrackAuthorLink>
             ) : (
               <S.SkeletonTrackAuthor></S.SkeletonTrackAuthor>
             )}
           </S.TrackAuthor>
           <S.TrackAlbum>
-            {isLoading ? (
+            {!isLoading ? (
               <S.TrackAlbumLink>{album}</S.TrackAlbumLink>
             ) : (
               <S.SkeletonTrackAuthor></S.SkeletonTrackAuthor>
             )}
           </S.TrackAlbum>
           <S.TrackTimeComponent>
-            <TrackTimeSvg />
+            <S.LikeButton disabled={disabled} onClick={() => toggleLike(item)}>
+              <TrackTimeSvg />
+            </S.LikeButton>
             <S.TrackTimeText>
               {durationFormatter(duration_in_seconds)}
             </S.TrackTimeText>

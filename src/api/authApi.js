@@ -1,6 +1,6 @@
 const apiAddress = 'https://skypro-music-api.skyeng.tech';
 
-export async function RegUser(email, password) {
+export async function RegUser({email, password}) {
   return fetch(`${apiAddress}/user/signup/`, {
     method: 'POST',
     body: JSON.stringify({
