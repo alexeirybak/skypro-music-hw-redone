@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { useSelector } from 'react-redux';
-import { activeTrackSelector } from '../../store/actions/creators/creators';
+import { activeTrack } from '../../store/actions/creators/creators';
 import { TrackPlaySvg } from '../../utils/iconSVG/trackPlay';
 import { TrackPlayLikeSvg } from '../../utils/iconSVG/trackPlayLike';
 import { TrackPlayDislikeSvg } from '../../utils/iconSVG/trackPlayDislike';
@@ -11,7 +11,7 @@ export const PlayerTrackPlay = ({ isLoading, isPlaying, setIsPlaying }) => {
     setIsPlaying(isPlaying);
   }, [isPlaying]);
 
-  const getTrack = useSelector(activeTrackSelector);
+  const getTrack = useSelector(activeTrack);
   const currentTrack = getTrack.payload.track.tracks.currentTrack;
 
   return (

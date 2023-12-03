@@ -1,9 +1,8 @@
-import { useState } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import { LogPage } from './pages/logPage';
 import { RegPage } from './pages/regPage';
 import { Main } from './pages/main';
-import { Favourites } from './pages/favourites';
+import { Favorites } from './pages/favorites';
 import { Category } from './pages/category';
 import { NotFound } from './pages/not-found';
 import { ProtectedRoute } from './components/ProtectedRoute';
@@ -35,9 +34,9 @@ export const AppRoutes = ({
           }
         />
         <Route
-          path='/favourites'
+          path='/favorites'
           element={
-            <Favourites
+            <Favorites
               setIsBar={setIsBar}
               isLoading={isLoading}
               setIsLoading={setIsLoading}

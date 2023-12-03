@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useContext } from 'react';
 import { UserContext } from '../../contexts/UserContext';
-import { activeTrackSelector } from '../../store/actions/creators/creators';
+import { activeTrack } from '../../store/actions/creators/creators';
 import { addLike, disLike, getAllTracks } from '../../api/apiGetTracks';
 import { setAllTracks } from '../../store/actions/creators/creators';
 import { refreshToken } from '../../api/authApi';
@@ -21,7 +21,7 @@ export const PlayList = ({
   const { user } = useContext(UserContext);
   const [disabled, setDisabled] = useState(false);
   const dispatch = useDispatch();
-  const getTrack = useSelector(activeTrackSelector);
+  const getTrack = useSelector(activeTrack);
   const currentTrack = getTrack.payload.track.tracks.currentTrack;
   const tokenRefresh = JSON.parse(localStorage.getItem('tokenRefresh'));
   const tokenAccess = JSON.parse(localStorage.getItem('tokenAccess'));
@@ -33,7 +33,7 @@ export const PlayList = ({
   }
 
   const handleTrackClick = (item) => {
-    dispatch(activeTrackSelector(item));
+    dispatch(activeTrack(item));
     setIsPlaying(true);
     setIsBar(true);
   };

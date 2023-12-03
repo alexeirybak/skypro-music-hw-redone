@@ -24,9 +24,9 @@ export const Filter = ({ isLoading, error }) => {
   };
 
   return (
-    <S.CenterBlockFilter>
+    <S.CenterBlockFilter onMouseLeave={() => setOpenMenu('')}>
       <S.FilterTitle>Искать по:</S.FilterTitle>
-      <S.FilterList onMouseLeave={() => setOpenMenu('')}>
+      <S.FilterList>
         <S.FilterButton
           as={openMenu === 'author' && S.BtnTextActive}
           onClick={() => toggleMenu('author')}
@@ -51,7 +51,7 @@ export const Filter = ({ isLoading, error }) => {
           </S.FilterBlock>
         </S.FilterContent>
       </S.FilterList>
-      <S.FilterList onMouseLeave={() => setOpenMenu('')}>
+      <S.FilterList>
         <S.FilterButton
           as={openMenu === 'year' && S.BtnTextActive}
           onClick={() => toggleMenu('year')}
@@ -76,7 +76,7 @@ export const Filter = ({ isLoading, error }) => {
           </S.FilterBlock>
         </S.FilterContentYear>
       </S.FilterList>
-      <S.FilterList onMouseLeave={() => setOpenMenu('')}>
+      <S.FilterList>
         <S.FilterButton
           as={openMenu === 'genre' && S.BtnTextActive}
           onClick={() => toggleMenu('genre')}

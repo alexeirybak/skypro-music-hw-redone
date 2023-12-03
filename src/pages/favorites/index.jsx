@@ -1,13 +1,13 @@
 import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { setAllTracks } from '../../store/actions/creators/creators';
+import { setAllTracks, setFavoriteTracks } from '../../store/actions/creators/creators';
 import { NavTrackSidebar } from '../../components/NavTrackSidebar';
 import { Footer } from '../../components/Footer';
-import { getFavouriteTracks } from '../../api/apiGetTracks';
+import { getFavoriteTracks } from '../../api/apiGetTracks';
 import { refreshToken } from '../../api/authApi';
 import * as S from './styles';
 
-export const Favourites = ({
+export const Favorites = ({
   isPlaying,
   setIsPlaying,
   setIsBar,
@@ -19,31 +19,29 @@ export const Favourites = ({
   const [error, setError] = useState(null);
   const dispatch = useDispatch();
 
-  const asyncFavouriteTrackAll = async () => {
+  const asyncFavoriteTrackAll = async () => {
     try {
-      const favouriteMusic = await getFavouriteTracks(tokenAccess);
-      dispatch(setAllTracks(favouriteMusic));
+      const favoriteMusic = await getFavoriteTracks(tokenAccess);
       setIsLoading(true);
+      console.log(favoriteMusic);
+      dispatch(setFavoriteTracks(favoriteMusic));
     } catch (error) {
       if (error.message === 'Токен протух') {
         const newAccess = await refreshToken(tokenRefresh);
         localStorage.setItem('tokenAccess', JSON.stringify(newAccess));
-        const favouriteMusic = await getFavouriteTracks(newAccess.access);
-        dispatch(setAllTracks(favouriteMusic));
+        const favoriteMusic = await getFavoriteTracks(newAccess.access);
+        dispatch(setFavoriteTracks(favoriteMusic));
         return;
-      }
+      } 
       setError(error.message);
       setIsLoading(false);
     } finally {
-      setIsLoading(false);
+      setIsLoading(false); 
     }
-  };
-
-  const allTracks = useSelector(setAllTracks);
-  let music = allTracks.payload.tracks.tracks.allTracks;
+  }; 
 
   useEffect(() => {
-    asyncFavouriteTrackAll();
+    asyncFavoriteTrackAll();
   }, []);
 
   return (

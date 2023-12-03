@@ -20,7 +20,7 @@ export async function getTrackById(trackId) {
   return track;
 }
 
-export async function getFavouriteTracks(token) {
+export async function getFavoriteTracks(token) {
   const response = await fetch(`${apiAddress}/catalog/track/favorite/all/`, {
     method: 'GET',
     headers: {

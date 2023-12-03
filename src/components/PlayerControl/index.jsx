@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { getTrackById } from '../../api/apiGetTracks';
 import {
-  activeTrackSelector,
+  activeTrack,
   nextTrack,
   prevTrack,
   toggleShuffled,
@@ -33,7 +33,7 @@ export const PlayerControls = ({
   const [shuffledIndex, setShuffledIndex] = useState(0);
   const [shuffleTrackEnable, setShuffleTrackEnable] = useState(false);
   const [trackHistory, setTrackHistory] = useState([]);
-  const getTrack = useSelector(activeTrackSelector);
+  const getTrack = useSelector(activeTrack);
   const allTracks = useSelector(setAllTracks);
   let music = allTracks.payload.tracks.tracks.allTracks;
   const currentTrack = getTrack.payload.track.tracks.currentTrack;
@@ -73,7 +73,7 @@ export const PlayerControls = ({
     async function fetchTrack() {
       try {
         const track = await getTrackById(trackId);
-        activeTrackSelector(track);
+        activeTrack(track);
       } catch (error) {
         console.error(error);
       }
@@ -133,7 +133,7 @@ export const PlayerControls = ({
     setTrackHistory((prevHistory) => [...prevHistory, currentTrack]);
 
     const nextMusic = music[nextIndex];
-    activeTrackSelector(nextMusic);
+    activeTrack(nextMusic);
 
     dispatch(nextTrack(nextMusic));
     setLoaded(false);
@@ -151,7 +151,7 @@ export const PlayerControls = ({
     if (trackHistory.length > 0) {
       const prevMusic = trackHistory.pop();
       setTrackHistory((prevHistory) => [...prevHistory]);
-      activeTrackSelector(prevMusic);
+      activeTrack(prevMusic);
       dispatch(prevTrack(prevMusic));
       setLoaded(false);
     } else {
@@ -172,7 +172,7 @@ export const PlayerControls = ({
       const prevMusic = shuffleTrackEnable
         ? shuffledTracks[prevIndex]
         : music[prevIndex];
-      activeTrackSelector(prevMusic);
+      activeTrack(prevMusic);
 
       dispatch(prevTrack(prevMusic));
       setLoaded(false);

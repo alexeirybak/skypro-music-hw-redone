@@ -20,6 +20,7 @@ export const FilterList = styled.div`
   display: flex;
   flex-direction: column;
   position: relative;
+  margin-bottom: 12px;
 `;
 
 export const FilterButton = styled.button`
@@ -82,7 +83,8 @@ export const FilterBlock = styled.div`
 
 const FilterContentMixin = css`
   position: absolute;
-  top: 50px;
+  top: 38px;
+  margin-top: 12px;
   overflow: hidden;
   display: flex;
   justify-content: center;
