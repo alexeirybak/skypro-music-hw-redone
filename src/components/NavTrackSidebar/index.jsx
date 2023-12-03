@@ -9,11 +9,13 @@ export const NavTrackSidebar = ({
   isPlaying,
   setIsPlaying,
   setIsBar,
+  error,
 }) => {
   return (
     <S.NavTrackSidebar>
       <Nav />
       <SidebarCenterBlock
+        error={error}
         isLoading={isLoading}
         setIsLoading={setIsLoading}
         isPlaying={isPlaying}

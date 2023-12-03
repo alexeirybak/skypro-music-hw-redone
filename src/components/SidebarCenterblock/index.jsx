@@ -14,26 +14,9 @@ export const SidebarCenterBlock = ({
   setIsBar,
   isLoading,
   setIsLoading,
+  error
 }) => {
-  const [error, setError] = useState(null);
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    async function fetchTracks() {
-      try {
-        const tracks = await getAllTracks();
-        dispatch(setAllTracks(tracks));
-        setIsLoading(true);
-        setError(false);
-      } catch (error) {
-        setIsLoading(false);
-        setError(error.message);
-      } finally {
-        setIsLoading(false);
-      }
-    }
-    fetchTracks();
-  }, [dispatch]);
+  
 
   return (
     <S.MainCenterBlock>

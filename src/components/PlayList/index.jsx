@@ -3,21 +3,16 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useContext } from 'react';
 import { UserContext } from '../../contexts/UserContext';
 import { activeTrack } from '../../store/actions/creators/creators';
-import { addLike, disLike, getAllTracks } from '../../api/apiGetTracks';
+import { addLike, disLike } from '../../api/apiGetTracks';
 import { setAllTracks } from '../../store/actions/creators/creators';
 import { refreshToken } from '../../api/authApi';
 import { durationFormatter } from '../../utils/durationFormatter';
 import { tracks } from '../../constants';
 import { TrackTitleSvg } from '../../utils/iconSVG/trackTitle';
-import { TrackTimeSvg } from '../../utils/iconSVG/trackTime';
+import { TrackLikesMainSvg } from '../../utils/iconSVG/trackLikeMain';
 import * as S from './styles';
 
-export const PlayList = ({
-  isPlaying,
-  setIsPlaying,
-  setIsBar,
-  isLoading 
-}) => {
+export const PlayList = ({ isPlaying, setIsPlaying, setIsBar, isLoading }) => {
   const { user } = useContext(UserContext);
   const [disabled, setDisabled] = useState(false);
   const dispatch = useDispatch();
@@ -27,7 +22,7 @@ export const PlayList = ({
   const tokenAccess = JSON.parse(localStorage.getItem('tokenAccess'));
   const allTracks = useSelector(setAllTracks);
   let music = allTracks.payload.tracks.tracks.allTracks;
-  
+
   if (isLoading) {
     music = [...Array(12)].flatMap(() => tracks);
   }
@@ -46,9 +41,6 @@ export const PlayList = ({
       } else {
         await addLike({ token: tokenAccess, id: item.id });
       }
-      const music = await getAllTracks();
-
-      // dispatch(getAllTracks(response));
     } catch (error) {
       if (error.message === 'Токен протух') {
         console.log(error.message);
@@ -59,8 +51,6 @@ export const PlayList = ({
         } else {
           await addLike({ token: newAccess.access, id: item.id });
         }
-        const response = await getAllTracks();
-        // dispatch(getAllTracks(response));
         return;
       }
     } finally {
@@ -72,6 +62,9 @@ export const PlayList = ({
     const { name, author, album, duration_in_seconds } = item;
     const updatedAuthor = author === '-' ? 'Неизвестный' : author;
     const isCurrentPlaying = currentTrack && item.id === currentTrack.id;
+    const isLiked =
+      Array.isArray(item.stared_user) &&
+      item.stared_user.some((el) => el.id === user.id);
 
     return (
       <S.PlaylistItem key={i}>
@@ -113,7 +106,7 @@ export const PlayList = ({
           </S.TrackAlbum>
           <S.TrackTimeComponent>
             <S.LikeButton disabled={disabled} onClick={() => toggleLike(item)}>
-              <TrackTimeSvg />
+              <TrackLikesMainSvg isLiked={isLiked} />
             </S.LikeButton>
             <S.TrackTimeText>
               {durationFormatter(duration_in_seconds)}

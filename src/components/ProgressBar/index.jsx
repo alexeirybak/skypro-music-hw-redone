@@ -32,7 +32,6 @@ export const ProgressBar = ({ currentTime, duration, onSeek, isPlaying }) => {
       </S.Timer>
       <S.ProgressBarWrapper
         onClick={handleClick}
-        $playing={isPlaying}
         ref={progressBarRef}
       >
         <S.ProgressBar style={{ width: `${progressPercentage}%` }} />

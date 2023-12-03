@@ -149,4 +149,5 @@ export const LikeButton = styled.button`
   background-color: var(--container);
   border: none;
   cursor: pointer;
+  padding-right: 10px;
 `;

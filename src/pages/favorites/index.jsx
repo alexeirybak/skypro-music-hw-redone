@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { setAllTracks, setFavoriteTracks } from '../../store/actions/creators/creators';
+import { useDispatch } from 'react-redux';
+import { setAllTracks } from '../../store/actions/creators/creators';
 import { NavTrackSidebar } from '../../components/NavTrackSidebar';
 import { Footer } from '../../components/Footer';
 import { getFavoriteTracks } from '../../api/apiGetTracks';
@@ -23,22 +23,21 @@ export const Favorites = ({
     try {
       const favoriteMusic = await getFavoriteTracks(tokenAccess);
       setIsLoading(true);
-      console.log(favoriteMusic);
-      dispatch(setFavoriteTracks(favoriteMusic));
+      dispatch(setAllTracks(favoriteMusic));
     } catch (error) {
       if (error.message === 'Токен протух') {
         const newAccess = await refreshToken(tokenRefresh);
         localStorage.setItem('tokenAccess', JSON.stringify(newAccess));
         const favoriteMusic = await getFavoriteTracks(newAccess.access);
-        dispatch(setFavoriteTracks(favoriteMusic));
+        dispatch(setAllTracks(favoriteMusic));
         return;
-      } 
+      }
       setError(error.message);
       setIsLoading(false);
     } finally {
-      setIsLoading(false); 
+      setIsLoading(false);
     }
-  }; 
+  };
 
   useEffect(() => {
     asyncFavoriteTrackAll();
