@@ -4,6 +4,7 @@ import {
   PREV_TRACK,
   TOGGLE_SHUFFLED,
   ALL_TRACKS,
+  ADD_TRACK,
 } from '../actions/types/types.js';
 
 const initialState = {
@@ -18,6 +19,15 @@ export default function trackReducer(state = initialState, action) {
 
     case ALL_TRACKS: {
       const { tracks } = action.payload;
+      return {
+        ...state,
+        allTracks: tracks,
+      };
+    }
+
+    case ADD_TRACK: {
+      const { tracks } = action.payload;
+
       return {
         ...state,
         allTracks: tracks,

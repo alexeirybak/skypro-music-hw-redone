@@ -1,4 +1,4 @@
-import { useEffect, useState,useContext } from 'react';
+import { useEffect, useState, useContext } from 'react';
 import { UserContext } from '../../contexts/UserContext';
 import { Link } from 'react-router-dom';
 import { RegUser } from '../../api/authApi';
@@ -90,6 +90,9 @@ export function RegPage() {
             <S.PrimaryButton onClick={handleRegister} disabled={primaryButton}>
               {primaryButton ? 'Загрузка...' : 'Зарегистрироваться'}
             </S.PrimaryButton>
+            <Link to='/login'>
+              <S.SecondaryButton>Уже зарегистрирован</S.SecondaryButton>
+            </Link>
           </S.Buttons>
         </>
       </S.ModalForm>

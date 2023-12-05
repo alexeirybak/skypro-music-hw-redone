@@ -1,4 +1,4 @@
-import { styled } from "styled-components";
+import { styled } from 'styled-components';
 
 export const PageContainer = styled.div`
   max-width: 100%;
@@ -51,6 +51,7 @@ export const ModalInput = styled.input`
 `;
 
 const Button = styled.button`
+  cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;

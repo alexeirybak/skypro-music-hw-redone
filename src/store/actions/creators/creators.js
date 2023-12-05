@@ -4,6 +4,7 @@ import {
   PREV_TRACK,
   TOGGLE_SHUFFLED,
   ALL_TRACKS,
+  ADD_TRACK
 } from '../types/types';
 
 export const setAllTracks = (tracks) => ({
@@ -11,6 +12,11 @@ export const setAllTracks = (tracks) => ({
   payload: {
     tracks,
   },
+});
+
+export const addTracks = (tracks) => ({
+  type: ADD_TRACK,
+  payload: { tracks },
 });
 
 export const activeTrack = (track) => ({

@@ -6,14 +6,13 @@ import { Favorites } from './pages/favorites';
 import { Category } from './pages/category';
 import { NotFound } from './pages/not-found';
 import { ProtectedRoute } from './components/ProtectedRoute';
-import { useContext} from 'react';
+import { useContext } from 'react';
 import { UserContext } from './contexts/UserContext';
 
 export const AppRoutes = ({
   onAuthButtonClick,
   isLoading,
   setIsLoading,
-  setIsBar,
   setIsPlaying,
   isPlaying,
 }) => {
@@ -25,7 +24,6 @@ export const AppRoutes = ({
           path='/'
           element={
             <Main
-              setIsBar={setIsBar}
               isLoading={isLoading}
               setIsLoading={setIsLoading}
               isPlaying={isPlaying}
@@ -37,7 +35,6 @@ export const AppRoutes = ({
           path='/favorites'
           element={
             <Favorites
-              setIsBar={setIsBar}
               isLoading={isLoading}
               setIsLoading={setIsLoading}
               isPlaying={isPlaying}

@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import * as S from './styles';
 
 export function LogPage() {
+
   const [error, setError] = useState(null);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
