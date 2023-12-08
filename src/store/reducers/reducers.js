@@ -3,13 +3,13 @@ import {
   NEXT_TRACK,
   PREV_TRACK,
   TOGGLE_SHUFFLED,
-} from '../actions/types/track.js';
+} from '../actions/types/types.js';
 
 const initialState = {
   track: null,
   shuffled: false,
   shuffledPlaylist: [],
-  playing: false,
+  playing: true,
 };
 
 export default function trackReducer(state = initialState, action) {
@@ -38,7 +38,7 @@ export default function trackReducer(state = initialState, action) {
         currentTrack: track,
       };
     }
-    
+
     case TOGGLE_SHUFFLED: {
       const { shuffledPlaylist, shuffled } = action.payload;
       return {

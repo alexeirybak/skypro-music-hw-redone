@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import { LogPage } from './pages/logPage';
 import { RegPage } from './pages/regPage';
@@ -12,13 +13,14 @@ export const AppRoutes = ({
   onAuthButtonClick,
   isLoading,
   music,
-  isPlaying,
-  setIsPlaying,
   currentTrack,
   setCurrentTrack,
   error,
+  setIsBar,
+  setIsPlaying,
+  isPlaying
 }) => {
-  
+
   return (
     <Routes>
       <Route element={<ProtectedRoute isAllowed={user} />}>
@@ -26,6 +28,7 @@ export const AppRoutes = ({
           path='/'
           element={
             <Main
+              setIsBar={setIsBar}
               isLoading={isLoading}
               music={music}
               isPlaying={isPlaying}
@@ -36,16 +39,28 @@ export const AppRoutes = ({
             />
           }
         />
-        <Route path='/favourites' element={<Favourites />} />
+        <Route
+          path='/favourites'
+          element={
+            <Favourites
+              isLoading={isLoading}
+              music={music}
+              isPlaying={isPlaying}
+              setIsPlaying={setIsPlaying}
+              currentTrack={currentTrack}
+              setCurrentTrack={setCurrentTrack}
+              error={error}
+            />
+          }
+        />
         <Route path='/category/:id' element={<Category />} />
       </Route>
+      <Route path='/register' element={<RegPage />} />
       <Route
-        path='/register'
-        element={<RegPage />}
+        path='/login'
+        element={<LogPage onAuthButtonClick={onAuthButtonClick} />}
       />
-      <Route path='/login' element={<LogPage onAuthButtonClick={onAuthButtonClick}/>} 
-      />
-      <Route path='*' element={<NotFound isLoading={isLoading}/>} />
+      <Route path='*' element={<NotFound isLoading={isLoading} />} />
     </Routes>
   );
 };
