@@ -11,12 +11,15 @@ export const TrackTitleImg = styled.svg`
   justify-content: center;
   rect {
     fill: var(--track-title-svg-bg);
+    transition: fill 0.5s ease;
   }
   path {
     stroke: var(--track-title-svg);
+    transition: stroke 0.5s ease;
   }
   ellipse {
     stroke: var(--track-title-svg);
+    transition: ellipse 0.5s ease;
   }
 `;
 
@@ -42,8 +45,8 @@ export const PlayingDot = styled.div`
   border-radius: 10px;
   display: block;
   animation: ${bubble_out} 0.7s ease-in-out infinite both;
-  ${({ $isPlaying }) => !$isPlaying && animationPaused}`
-;
+  ${({ $isPlaying }) => !$isPlaying && animationPaused}
+`;
 
 export const TrackTitleWrapper = styled.div`
   display: inline-block;

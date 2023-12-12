@@ -46,6 +46,7 @@ export const PlayList = ({
   const currentTrack = getTrack.payload.track.tracks.currentTrack;
   const tokenRefresh = JSON.parse(localStorage.getItem('tokenRefresh'));
   const tokenAccess = JSON.parse(localStorage.getItem('tokenAccess'));
+  
   const allTracks = useSelector(setAllTracks);
   let music = allTracks.payload.tracks.tracks.allTracks;
   if (isLoading) {
@@ -69,9 +70,8 @@ export const PlayList = ({
       dispatch(setAllTracks(response));
     } catch (error) {
       if (error.message === 'Токен протух') {
-        console.log(error.message);
         const newAccess = await refreshToken(tokenRefresh);
-        localStorage.setItem('tokenAccess', JSON.stringify(newAccess));
+        localStorage.setItem('tokenAccess', JSON.stringify(newAccess)); 
         if (item.stared_user.find((el) => el.id === user.id)) {
           await disLike({ token: newAccess.access, id: item.id });
         } else {

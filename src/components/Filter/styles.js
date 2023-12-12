@@ -115,6 +115,7 @@ export const FilterContentGenre = styled.div`
 `;
 
 const FilterListMixin = css`
+  height: 150px;
   display: inline-flex;
   flex-direction: column;
   align-items: flex-start;
@@ -151,7 +152,6 @@ const FilterListMixin = css`
 export const FilterListMenu = styled.ul`
   ${FilterListMixin};
   width: 180px;
-  height: 237px;
 `;
 
 export const FilterListMenuItem = styled.li``;
@@ -161,6 +161,5 @@ export const FilterListMenuLink = styled.a``;
 export const FilterListMenuYear = styled.ul`
   ${FilterListMixin};
   width: 116px;
-  height: 237px;
   align-items: center;
 `;

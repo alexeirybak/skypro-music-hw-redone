@@ -1,22 +1,18 @@
 import { useState, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 import { useContext } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { UserContext } from '../../contexts/UserContext';
 import {
   setAllTracks,
   activeTrack,
+  setFavoriteTracks,
 } from '../../store/actions/creators/creators';
 import { Nav } from '../../components/Nav';
 import { MainSidebar } from '../../components/MainSidebar';
 import { Search } from '../../components/Search';
 import { Filter } from '../../components/Filter';
 import { Footer } from '../../components/Footer';
-import {
-  getFavoriteTracks,
-  addLike,
-  disLike,
-  getAllTracks,
-} from '../../api/apiGetTracks';
+import { getFavoriteTracks, disLike } from '../../api/apiGetTracks';
 import { ContentTitle } from '../../components/ContentTitle';
 import { ErrorBlock } from '../../components/ErrorBlock';
 import { refreshToken } from '../../api/authApi';
@@ -33,65 +29,43 @@ export const Favorites = ({
   setIsLoading,
 }) => {
   const tokenRefresh = JSON.parse(localStorage.getItem('tokenRefresh'));
-  const tokenAccess = JSON.parse(localStorage.getItem('tokenAccess'));
+  let tokenAccess = JSON.parse(localStorage.getItem('tokenAccess'));
+  const [disabled, setDisabled] = useState(false);
   const [error, setError] = useState(null);
   const dispatch = useDispatch();
 
-  const fetchTracks = async () => {
+  const fetchFavoriteTracks = async () => {
     try {
-      const tracks = await getAllTracks();
-      dispatch(setAllTracks(tracks));
-      setIsLoading(true);
+      const favoriteTracks = await getFavoriteTracks({
+        token: tokenAccess.access,
+      });
       setError(false);
-    } catch (error) {
-      setIsLoading(false);
-      setError(error.message);
-    } finally {
-      setIsLoading(false);
-      return tracks;
-    }
-  };
-
-  useEffect(() => {
-    fetchTracks();
-  }, []);
-
-  const asyncFavoriteTrackAll = async () => {
-    try {
-      const favoriteMusic = await getFavoriteTracks(tokenAccess);
-      console.log(favoriteMusic);
-      setIsLoading(true);
-      dispatch(setAllTracks(favoriteMusic));
-    } catch (error) {
-      if (error.message === 'Токен протух') {
-        const newAccess = await refreshToken(tokenRefresh);
-        localStorage.setItem('tokenAccess', JSON.stringify(newAccess));
-        const favoriteMusic = await getFavoriteTracks(newAccess.access);
-        dispatch(setAllTracks(favoriteMusic));
-        return;
+      if (!favoriteTracks[0]) {
+        setError('В этом плейлисте еще нет Ваших треков');
       }
-      setError(error.message);
+      dispatch(setFavoriteTracks(favoriteTracks));
+      dispatch(setAllTracks(favoriteTracks));
+      setIsLoading(true);
+    } catch (error) {
+      const newAccess = await refreshToken(tokenRefresh);
+      localStorage.setItem('tokenAccess', JSON.stringify(newAccess));
+      const favoriteTracks = await getFavoriteTracks(newAccess.access);
+      dispatch(setFavoriteTracks(favoriteTracks));
       setIsLoading(false);
+      setError(error.message);
     } finally {
       setIsLoading(false);
     }
   };
 
   useEffect(() => {
-    asyncFavoriteTrackAll();
+    fetchFavoriteTracks();
   }, []);
 
-  const { user } = useContext(UserContext);
-  const [disabled, setDisabled] = useState(false);
   const getTrack = useSelector(activeTrack);
   const currentTrack = getTrack.payload.track.tracks.currentTrack;
-  const allTracks = useSelector(setAllTracks);
-  let music = allTracks.payload.tracks.tracks.allTracks;
-  music = music.filter(
-    (item) =>
-      item.stared_user &&
-      item.stared_user.some((userObj) => userObj.username === user.username),
-  );
+  const favoriteTracks = useSelector(setFavoriteTracks);
+  let music = favoriteTracks.payload.tracks.tracks.favoriteTracks;
 
   if (isLoading) {
     music = [...Array(12)].flatMap(() => tracks);
@@ -105,25 +79,19 @@ export const Favorites = ({
   const toggleLike = async (item) => {
     try {
       setDisabled(true);
-      if (item.stared_user.find((el) => el.id === user.id)) {
-        await disLike({ token: tokenAccess, id: item.id });
-      } else {
-        await addLike({ token: tokenAccess, id: item.id });
-      }
-      const response = await getAllTracks();
-      dispatch(setAllTracks(response));
+      const tokenAccess = JSON.parse(localStorage.getItem('tokenAccess'));
+      await disLike({ token: tokenAccess, id: item.id });
+      const response = await getFavoriteTracks({
+        token: tokenAccess.access,
+      });
+      dispatch(setFavoriteTracks(response));
     } catch (error) {
       if (error.message === 'Токен протух') {
-        console.log(error.message);
         const newAccess = await refreshToken(tokenRefresh);
         localStorage.setItem('tokenAccess', JSON.stringify(newAccess));
-        if (item.stared_user.find((el) => el.id === user.id)) {
-          await disLike({ token: newAccess.access, id: item.id });
-        } else {
-          await addLike({ token: newAccess.access, id: item.id });
-        }
-        const response = await getAllTracks();
-        dispatch(setAllTracks(response));
+        await disLike({ token: newAccess.access, id: item.id });
+        const response = await getFavoriteTracks({ token: newAccess.access });
+        dispatch(setFavoriteTracks(response));
         return;
       }
     } finally {
@@ -193,7 +161,7 @@ export const Favorites = ({
         <Nav />
         <S.MainCenterBlock>
           <Search />
-          <S.CenterBlockH2>Треки</S.CenterBlockH2>
+          <S.CenterBlockH2>Любимые треки</S.CenterBlockH2>
           <Filter error={error} />
           <S.CenterBlockContent>
             <ContentTitle />

@@ -9,18 +9,8 @@ export async function getAllTracks() {
   return tracks;
 }
 
-export async function getTrackById(trackId) {
-  const response = await fetch(`${apiAddress}/catalog/track/${trackId}`);
-
-  if (!response.ok) {
-    throw new Error('Ошибка сервера');
-  }
-
-  const track = await response.json();
-  return track;
-}
-
-export async function getFavoriteTracks(token) {
+export async function getFavoriteTracks({ token }) {
+  console.log(token)
   const response = await fetch(`${apiAddress}/catalog/track/favorite/all/`, {
     method: 'GET',
     headers: {
@@ -33,22 +23,32 @@ export async function getFavoriteTracks(token) {
 
 export async function addLike({ token, id }) {
   const response = await fetch(`${apiAddress}/catalog/track/${id}/favorite/`, {
-    method: "POST",
+    method: 'POST',
     headers: {
       Authorization: `Bearer ${token}`,
     },
   });
-  
+
+  if (response.status === 401) throw new Error('Токен протух');
   return await response.json();
 }
 
 export async function disLike({ token, id }) {
   const response = await fetch(`${apiAddress}/catalog/track/${id}/favorite/`, {
-    method: "DELETE",
+    method: 'DELETE',
     headers: {
       Authorization: `Bearer ${token}`,
     },
   });
-  if (response.status === 401) throw new Error("Токен протух");
+  if (response.status === 401) throw new Error('Токен протух');
+  return await response.json();
+}
+
+export async function getCategory({ id }) {
+  const response = await fetch(`${apiAddress}/catalog/selection/${id}`, {
+    method: 'GET',
+  });
+  if (response.status === 401)
+    throw new Error('Не удалось загрузить плейлист, попробуйте позже');
   return await response.json();
 }

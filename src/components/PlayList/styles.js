@@ -39,12 +39,15 @@ export const TrackTitleImage = styled.svg`
   justify-content: center;
   rect {
     fill: var(--track-title-svg-bg);
+    transition: fill 0.5s ease;
   }
   path {
     stroke: var(--track-title-svg);
+    transition: stroke 0.5s ease;
   }
   ellipse {
     stroke: var(--track-title-svg);
+    transition: ellipse 0.5s ease;
   }
 `;
 
@@ -150,4 +153,5 @@ export const LikeButton = styled.button`
   border: none;
   cursor: pointer;
   padding-right: 10px;
+  transition: background-color 0.5s ease;
 `;

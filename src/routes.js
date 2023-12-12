@@ -42,7 +42,17 @@ export const AppRoutes = ({
             />
           }
         />
-        <Route path='/category/:id' element={<Category />} />
+        <Route
+          path='/category/:id'
+          element={
+            <Category
+              isLoading={isLoading}
+              setIsLoading={setIsLoading}
+              isPlaying={isPlaying}
+              setIsPlaying={setIsPlaying}
+            />
+          }
+        />
       </Route>
       <Route path='/register' element={<RegPage />} />
       <Route

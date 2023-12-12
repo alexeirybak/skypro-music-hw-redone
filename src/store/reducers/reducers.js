@@ -4,19 +4,19 @@ import {
   PREV_TRACK,
   TOGGLE_SHUFFLED,
   ALL_TRACKS,
-  ADD_TRACK,
+  FAVORITE_TRACKS,
 } from '../actions/types/types.js';
 
 const initialState = {
   track: null,
   shuffled: false,
   shuffledPlaylist: [],
-  allTracks: []
+  allTracks: [],
+  favoriteTracks: [],
 };
 
 export default function trackReducer(state = initialState, action) {
   switch (action.type) {
-
     case ALL_TRACKS: {
       const { tracks } = action.payload;
       return {
@@ -25,15 +25,15 @@ export default function trackReducer(state = initialState, action) {
       };
     }
 
-    case ADD_TRACK: {
+    case FAVORITE_TRACKS: {
       const { tracks } = action.payload;
 
       return {
         ...state,
-        allTracks: tracks,
+        favoriteTracks: tracks,
       };
     }
-    
+
     case SET_CURRENT_TRACK: {
       const { track } = action.payload;
       return {

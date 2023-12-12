@@ -35,6 +35,7 @@ export const PlayerControls = ({
   const [trackHistory, setTrackHistory] = useState([]);
   const getTrack = useSelector(activeTrack);
   const allTracks = useSelector(setAllTracks);
+  
   let music = allTracks.payload.tracks.tracks.allTracks;
   const currentTrack = getTrack.payload.track.tracks.currentTrack;
 
@@ -68,18 +69,6 @@ export const PlayerControls = ({
       handleStart();
     }
   }, [loaded]);
-
-  useEffect(() => {
-    async function fetchTrack() {
-      try {
-        const track = await getTrackById(trackId);
-        activeTrack(track);
-      } catch (error) {
-        console.error(error);
-      }
-    }
-    fetchTrack();
-  }, [trackId]);
 
   useEffect(() => {
     setLoaded(false);

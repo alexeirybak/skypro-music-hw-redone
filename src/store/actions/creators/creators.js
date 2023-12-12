@@ -4,7 +4,7 @@ import {
   PREV_TRACK,
   TOGGLE_SHUFFLED,
   ALL_TRACKS,
-  ADD_TRACK
+  FAVORITE_TRACKS,
 } from '../types/types';
 
 export const setAllTracks = (tracks) => ({
@@ -14,9 +14,11 @@ export const setAllTracks = (tracks) => ({
   },
 });
 
-export const addTracks = (tracks) => ({
-  type: ADD_TRACK,
-  payload: { tracks },
+export const setFavoriteTracks = (tracks) => ({
+  type: FAVORITE_TRACKS,
+  payload: {
+    tracks,
+  },
 });
 
 export const activeTrack = (track) => ({
@@ -47,4 +49,3 @@ export const toggleShuffled = (shuffledPlaylist, shuffled) => ({
     shuffled,
   },
 });
-
