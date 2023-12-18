@@ -1,23 +1,62 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { setAllTracks } from '../../store/actions/creators/creators';
+import { setAllTracks, setFilter } from '../../store/actions/creators/creators';
 import { releaseDateFormatter } from '../../utils/releaseDateFormatter';
 import * as S from './styles';
 
-export const Filter = ({ isLoading, error }) => {
+export const Filter = ({
+  isLoading,
+  error,
+  setDataFilter,
+  dataFilter,
+  numberTracks,
+}) => {
+  const [openMenu, setOpenMenu] = useState('');
+  const dispatch = useDispatch();
+  const [selectedAuthors, setSelectedAuthors] = useState([]);
+  const [selectedGenres, setSelectedGenres] = useState([]);
+  const [activeAuthors, setActiveAuthors] = useState(true);
+  const [activeGenres, setActiveGenres] = useState(true);
+
+  const handleAuthorClick = (author) => {
+    setSelectedAuthors((prevSelected) => {
+      if (prevSelected.includes(author)) {
+        return prevSelected.filter((a) => a !== author);
+      } else {
+        return [...prevSelected, author];
+      }
+    });
+    setActiveGenres(false);
+  };
+
+  const handleGenreClick = (genre) => {
+    setSelectedGenres((prevSelected) => {
+      if (prevSelected.includes(genre)) {
+        return prevSelected.filter((g) => g !== genre);
+      } else {
+        return [...prevSelected, genre];
+      }
+    });
+    setActiveAuthors(false);
+  };
+
+  useEffect(() => {
+    dispatch(setFilter('authors', selectedAuthors));
+  }, [selectedAuthors, dispatch]);
+
+  useEffect(() => {
+    dispatch(setFilter('genres', selectedGenres));
+  }, [selectedGenres, dispatch]);
+
+  const handleMenuClick = (menu) => {
+    setOpenMenu(openMenu === menu ? '' : menu);
+  };
+
   const allTracks = useSelector(setAllTracks);
   let music = allTracks.payload.tracks.tracks.allTracks;
-  const formattedAuthorList = [
-    ...new Set(
-      music.map((item) => (item.author === '-' ? 'Неизвестный' : item.author)),
-    ),
-  ];
-  const formattedYearList = releaseDateFormatter([
-    ...new Set(music.map((item) => item.release_date)),
-  ]);
+  const formattedAuthorList = [...new Set(music.map((item) => item.author))];
+  const formattedYearList = releaseDateFormatter.map((item) => item);
   const genreList = [...new Set(music.map((item) => item.genre))];
-
-  const [openMenu, setOpenMenu] = useState('');
 
   const toggleMenu = (menuName) => {
     setOpenMenu((prevMenu) => (prevMenu === menuName ? '' : menuName));
@@ -29,22 +68,25 @@ export const Filter = ({ isLoading, error }) => {
       <S.FilterList>
         <S.FilterButton
           as={openMenu === 'author' && S.BtnTextActive}
-          onClick={() => toggleMenu('author')}
+          onClick={() => handleMenuClick('author')}
           disabled={error || isLoading}
         >
           исполнителю
         </S.FilterButton>
-        {openMenu === 'author' ? (
-          <S.FilterCounter>{formattedAuthorList.length}</S.FilterCounter>
-        ) : (
-          ''
+        {openMenu === 'author' && selectedAuthors.length > 0 && (
+          <S.FilterCounter>{numberTracks}</S.FilterCounter>
         )}
         <S.FilterContent $isAuthorMenuOpen={openMenu === 'author'}>
           <S.FilterBlock>
             <S.FilterListMenu>
               {formattedAuthorList.map((item) => (
                 <S.FilterListMenuItem key={item}>
-                  <S.FilterListMenuLink href='#'>{item}</S.FilterListMenuLink>
+                  <S.FilterListMenuLink
+                    onClick={() => handleAuthorClick(item)}
+                    $active={selectedAuthors.includes(item) || activeAuthors}
+                  >
+                    {item}
+                  </S.FilterListMenuLink>
                 </S.FilterListMenuItem>
               ))}
             </S.FilterListMenu>
@@ -59,42 +101,46 @@ export const Filter = ({ isLoading, error }) => {
         >
           году выпуска
         </S.FilterButton>
-        {openMenu === 'year' ? (
-          <S.FilterCounter>{formattedYearList.length}</S.FilterCounter>
-        ) : (
-          ''
-        )}
+
         <S.FilterContentYear $isYearMenuOpen={openMenu === 'year'}>
           <S.FilterBlock>
-            <S.FilterListMenuYear>
+            <S.FilterListMenu>
               {formattedYearList.map((item) => (
                 <S.FilterListMenuItem key={item}>
-                  <S.FilterListMenuLink href='#'>{item}</S.FilterListMenuLink>
+                  <S.FilterListMenuLink
+                    onClick={() => setDataFilter(item)}
+                    $active={dataFilter.includes(item)}
+                  >
+                    {item}
+                  </S.FilterListMenuLink>
                 </S.FilterListMenuItem>
               ))}
-            </S.FilterListMenuYear>
+            </S.FilterListMenu>
           </S.FilterBlock>
         </S.FilterContentYear>
       </S.FilterList>
       <S.FilterList>
         <S.FilterButton
           as={openMenu === 'genre' && S.BtnTextActive}
-          onClick={() => toggleMenu('genre')}
+          onClick={() => handleMenuClick('genre')}
           disabled={error || isLoading}
         >
           жанру
         </S.FilterButton>
-        {openMenu === 'genre' ? (
-          <S.FilterCounter>{genreList.length}</S.FilterCounter>
-        ) : (
-          ''
+        {openMenu === 'genre' && selectedGenres.length > 0 && (
+          <S.FilterCounter>{numberTracks}</S.FilterCounter>
         )}
         <S.FilterContentGenre $isGenreMenuOpen={openMenu === 'genre'}>
           <S.FilterBlock>
             <S.FilterListMenu>
               {genreList.map((item) => (
                 <S.FilterListMenuItem key={item}>
-                  <S.FilterListMenuLink href='#'>{item}</S.FilterListMenuLink>
+                  <S.FilterListMenuLink
+                    onClick={() => handleGenreClick(item)}
+                    $active={selectedGenres.includes(item) || activeGenres}
+                  >
+                    {item}
+                  </S.FilterListMenuLink>
                 </S.FilterListMenuItem>
               ))}
             </S.FilterListMenu>

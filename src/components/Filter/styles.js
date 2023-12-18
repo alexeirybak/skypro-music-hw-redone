@@ -63,8 +63,8 @@ export const BtnTextActive = styled(FilterButton)`
 `;
 
 export const FilterCounter = styled.div`
-  width: 26px;
-  height: 26px;
+  width: 30px;
+  height: 30px;
   color: #fff;
   background-color: #ad61ff;
   border-radius: 50%;
@@ -94,23 +94,22 @@ const FilterContentMixin = css`
   transition: 1s ease max-height;
   background: var(--title-track-img);
   z-index: 1;
+  width: 248px;
 `;
 
 export const FilterContent = styled.div`
-  width: 248px;
-  max-height: ${({ $isAuthorMenuOpen }) => ($isAuthorMenuOpen ? '305px' : '0')};
+  max-height: ${({ $isAuthorMenuOpen }) =>
+    $isAuthorMenuOpen ? '305px' : '0'};
   ${FilterContentMixin};
 `;
 
 export const FilterContentYear = styled.div`
-  width: 144px;
   max-height: ${({ $isYearMenuOpen }) => ($isYearMenuOpen ? '305px' : '0')};
   ${FilterContentMixin};
 `;
 
 export const FilterContentGenre = styled.div`
   max-height: ${({ $isGenreMenuOpen }) => ($isGenreMenuOpen ? '305px' : '0')};
-  width: 248px;
   ${FilterContentMixin};
 `;
 
@@ -120,14 +119,12 @@ const FilterListMixin = css`
   flex-direction: column;
   align-items: flex-start;
   row-gap: 28px;
-  font-variant-numeric: lining-nums proportional-nums;
   font-size: 20px;
   font-weight: 400;
   line-height: 24px;
   overflow-x: hidden;
   scrollbar-color: var(--scroll-thumb) var(--scrollbar);
   a {
-    color: var(--main-text);
     transition: color 0.3s ease;
   }
   a:active,
@@ -156,10 +153,7 @@ export const FilterListMenu = styled.ul`
 
 export const FilterListMenuItem = styled.li``;
 
-export const FilterListMenuLink = styled.a``;
-
-export const FilterListMenuYear = styled.ul`
-  ${FilterListMixin};
-  width: 116px;
-  align-items: center;
+export const FilterListMenuLink = styled.a`
+  color: ${(props) => (props.$active ? '#b672ff' : 'var(--main-text)')};
+  text-decoration: ${(props) => (props.$active ? 'underline' : 'none')};
 `;

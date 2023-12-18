@@ -2,9 +2,13 @@ import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useContext } from 'react';
 import { UserContext } from '../../contexts/UserContext';
-import { activeTrack } from '../../store/actions/creators/creators';
+import {
+  activeTrack,
+  setAllTracks,
+  setSearchTerm,
+  setFilter,
+} from '../../store/actions/creators/creators';
 import { addLike, disLike } from '../../api/apiGetTracks';
-import { setAllTracks } from '../../store/actions/creators/creators';
 import { getAllTracks } from '../../api/apiGetTracks';
 import { refreshToken } from '../../api/authApi';
 import { durationFormatter } from '../../utils/durationFormatter';
@@ -19,8 +23,15 @@ export const PlayList = ({
   isPlaying,
   setIsPlaying,
   setError,
+  dataFilter,
+  setNumberTracks,
 }) => {
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(setSearchTerm(null));
+    dispatch(setFilter(null));
+  }, []);
 
   const fetchTracks = async () => {
     try {
@@ -40,15 +51,13 @@ export const PlayList = ({
     fetchTracks();
   }, []);
 
-  const { user } = useContext(UserContext);
-  const [disabled, setDisabled] = useState(false);
-  const getTrack = useSelector(activeTrack);
-  const currentTrack = getTrack.payload.track.tracks.currentTrack;
   const tokenRefresh = JSON.parse(localStorage.getItem('tokenRefresh'));
   const tokenAccess = JSON.parse(localStorage.getItem('tokenAccess'));
-  
-  const allTracks = useSelector(setAllTracks);
-  let music = allTracks.payload.tracks.tracks.allTracks;
+  const { user } = useContext(UserContext);
+  const [disabled, setDisabled] = useState(false);
+  const currentTrack = useSelector((state) => state.tracks.currentTrack);
+  let music = useSelector((state) => state.tracks.allTracks);
+
   if (isLoading) {
     music = [...Array(12)].flatMap(() => tracks);
   }
@@ -71,7 +80,7 @@ export const PlayList = ({
     } catch (error) {
       if (error.message === 'Токен протух') {
         const newAccess = await refreshToken(tokenRefresh);
-        localStorage.setItem('tokenAccess', JSON.stringify(newAccess)); 
+        localStorage.setItem('tokenAccess', JSON.stringify(newAccess));
         if (item.stared_user.find((el) => el.id === user.id)) {
           await disLike({ token: newAccess.access, id: item.id });
         } else {
@@ -86,9 +95,54 @@ export const PlayList = ({
     }
   };
 
-  const fullPlayList = music.map((item, i) => {
+  let filteredMusic = [...music];
+  const symbols = useSelector((state) => state.tracks.letters);
+  const filtersType = useSelector((state) => state.tracks.filterType);
+  const filtersValues = useSelector((state) => state.tracks.filterValues);
+
+  if (symbols) {
+    filteredMusic = filteredMusic.filter((item) => {
+      return (
+        item.name.toLowerCase().includes(symbols.toLowerCase()) ||
+        item.author.toLowerCase().includes(symbols.toLowerCase()) ||
+        item.album.toLowerCase().includes(symbols.toLowerCase())
+      );
+    });
+  }
+
+  if (filtersType && filtersValues.length > 0) {
+    filteredMusic = filteredMusic.filter((track) => {
+      if (filtersType === 'authors') {
+        return filtersValues.includes(track.author);
+      } else if (filtersType === 'genres') {
+        return filtersValues.includes(track.genre);
+      }
+      return true;
+    });
+  }
+
+  if (dataFilter === 'Сначала старые') {
+    filteredMusic = filteredMusic.sort(
+      (a, b) => new Date(a.release_date) - new Date(b.release_date),
+    );
+  } else if (dataFilter === 'Сначала новые') {
+    filteredMusic = filteredMusic.sort(
+      (a, b) => new Date(b.release_date) - new Date(a.release_date),
+    );
+  }
+
+  useEffect(() => {
+    if (setNumberTracks) {
+      if (filteredMusic.length > 99) {
+        setNumberTracks('99+');
+      } else {
+        setNumberTracks(filteredMusic.length);
+      }
+    }
+  }, [filteredMusic, setNumberTracks]);
+
+  const fullPlayList = filteredMusic.map((item, i) => {
     const { name, author, album, duration_in_seconds } = item;
-    const updatedAuthor = author === '-' ? 'Неизвестный' : author;
     const isCurrentPlaying = currentTrack && item.id === currentTrack.id;
     const isLiked =
       Array.isArray(item.stared_user) &&
@@ -120,7 +174,7 @@ export const PlayList = ({
 
           <S.TrackAuthor>
             {!isLoading ? (
-              <S.TrackAuthorLink>{updatedAuthor}</S.TrackAuthorLink>
+              <S.TrackAuthorLink>{author}</S.TrackAuthorLink>
             ) : (
               <S.SkeletonTrackAuthor></S.SkeletonTrackAuthor>
             )}
@@ -144,5 +198,6 @@ export const PlayList = ({
       </S.PlaylistItem>
     );
   });
+
   return <S.ContentPlayList>{fullPlayList}</S.ContentPlayList>;
 };

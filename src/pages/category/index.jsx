@@ -5,17 +5,13 @@ import { UserContext } from '../../contexts/UserContext';
 import {
   setAllTracks,
   activeTrack,
+  setSearchTerm
 } from '../../store/actions/creators/creators';
 import { Nav } from '../../components/Nav';
 import { MainSidebar } from '../../components/MainSidebar';
 import { Search } from '../../components/Search';
-import { Filter } from '../../components/Filter';
 import { Footer } from '../../components/Footer';
-import {
-  addLike,
-  disLike,
-  getCategory,
-} from '../../api/apiGetTracks';
+import { addLike, disLike, getCategory } from '../../api/apiGetTracks';
 import { ContentTitle } from '../../components/ContentTitle';
 import { ErrorBlock } from '../../components/ErrorBlock';
 import { refreshToken } from '../../api/authApi';
@@ -36,6 +32,9 @@ export function Category({ isPlaying, setIsPlaying, isLoading, setIsLoading }) {
   let tokenAccess = JSON.parse(localStorage.getItem('tokenAccess'));
   const [error, setError] = useState(null);
   const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(setSearchTerm(null));
+  }, []);
 
   const fetchTracks = async () => {
     try {
@@ -61,10 +60,9 @@ export function Category({ isPlaying, setIsPlaying, isLoading, setIsLoading }) {
 
   const { user } = useContext(UserContext);
   const [disabled, setDisabled] = useState(false);
-  const getTrack = useSelector(activeTrack);
-  const currentTrack = getTrack.payload.track.tracks.currentTrack;
-  const allTracks = useSelector(setAllTracks);
-  let music = allTracks.payload.tracks.tracks.allTracks;
+  const currentTrack = useSelector((state) => state.tracks.currentTrack);
+  let music = useSelector((state) => state.tracks.allTracks);
+
   if (isLoading) {
     music = [...Array(12)].flatMap(() => tracks);
   }
@@ -84,7 +82,6 @@ export function Category({ isPlaying, setIsPlaying, isLoading, setIsLoading }) {
       }
     } catch (error) {
       if (error.message === 'Токен протух') {
-        console.log(error.message);
         const newAccess = await refreshToken(tokenRefresh);
         localStorage.setItem('tokenAccess', JSON.stringify(newAccess));
         tokenAccess = newAccess.access;
@@ -101,9 +98,20 @@ export function Category({ isPlaying, setIsPlaying, isLoading, setIsLoading }) {
     }
   };
 
-  const fullPlayList = music.map((item, i) => {
+  const symbols = useSelector((state) => state.tracks.letters);
+  let filteredMusic = music;
+
+  if (symbols) {
+    filteredMusic = music.filter(
+      (item) =>
+        item.name.toLowerCase().includes(symbols.toLowerCase()) ||
+        item.author.toLowerCase().includes(symbols.toLowerCase()) ||
+        item.album.toLowerCase().includes(symbols.toLowerCase()),
+    );
+  }
+
+  const fullPlayList = filteredMusic.map((item, i) => {
     const { name, author, album, duration_in_seconds } = item;
-    const updatedAuthor = author === '-' ? 'Неизвестный' : author;
     const isCurrentPlaying = currentTrack && item.id === currentTrack.id;
     const isLiked =
       Array.isArray(item.stared_user) &&
@@ -135,7 +143,7 @@ export function Category({ isPlaying, setIsPlaying, isLoading, setIsLoading }) {
 
           <S.TrackAuthor>
             {!isLoading ? (
-              <S.TrackAuthorLink>{updatedAuthor}</S.TrackAuthorLink>
+              <S.TrackAuthorLink>{author}</S.TrackAuthorLink>
             ) : (
               <S.SkeletonTrackAuthor></S.SkeletonTrackAuthor>
             )}
@@ -167,7 +175,6 @@ export function Category({ isPlaying, setIsPlaying, isLoading, setIsLoading }) {
         <S.MainCenterBlock>
           <Search />
           <S.CenterBlockH2>{category.alt}</S.CenterBlockH2>
-          <Filter />
           <S.CenterBlockContent>
             <ContentTitle />
             {error ? (

@@ -1,6 +1,8 @@
 import styled from 'styled-components';
 
 export const MainSidebar = styled.div`
-  max-width: 418px;
-  padding: 20px 90px 20px 78px;
+  padding: 20px 78px 20px 78px;
+  display: flex;
+  margin: 0 auto;
+  flex-direction: column;
 `;

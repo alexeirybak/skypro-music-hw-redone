@@ -2,17 +2,17 @@ import styled, { keyframes } from 'styled-components';
 
 export const SidebarBlock = styled.div`
   height: 100%;
-  padding: 240px 0 0;
+  padding: 70px 0 0;
   display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
+  flex-direction: row;
+  justify-content: center;
 `;
 
 export const SidebarList = styled.div`
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: center;
-  row-gap: 30px;
+  column-gap: 30px;
 `;
 
 export const SidebarItem = styled.div`
@@ -28,6 +28,7 @@ export const SidebarLink = styled.a`
 export const SidebarImg = styled.img`
   width: 100%;
   height: auto;
+  border-radius: 10px;
 `;
 
 const blink = keyframes`

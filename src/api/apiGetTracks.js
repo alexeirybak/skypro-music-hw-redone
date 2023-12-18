@@ -10,7 +10,6 @@ export async function getAllTracks() {
 }
 
 export async function getFavoriteTracks({ token }) {
-  console.log(token)
   const response = await fetch(`${apiAddress}/catalog/track/favorite/all/`, {
     method: 'GET',
     headers: {

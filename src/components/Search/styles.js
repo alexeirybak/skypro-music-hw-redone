@@ -23,7 +23,8 @@ export const Handle = styled.div`
 export const SearchText = styled.input`
   flex-grow: 100;
   background-color: transparent;
-  border: none;
+  border: 1px var(--main-text) solid;
+  border-radius: 10px;
   padding: 13px 10px 14px;
   font-style: normal;
   font-weight: 400;

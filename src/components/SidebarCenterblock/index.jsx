@@ -13,12 +13,19 @@ export const SidebarCenterBlock = ({
   setIsLoading,
 }) => {
   const [error, setError] = useState(null);
+  const [dataFilter, setDataFilter] = useState('По умолчанию');
+  const [numberTracks, setNumberTracks] = useState(null);
 
   return (
     <S.MainCenterBlock>
       <Search />
       <S.CenterBlockH2>Треки</S.CenterBlockH2>
-      <Filter error={error} />
+      <Filter
+        error={error}
+        setDataFilter={setDataFilter}
+        dataFilter={dataFilter}
+        numberTracks={numberTracks}
+      />
       <S.CenterBlockContent>
         <ContentTitle />
         {error ? (
@@ -30,6 +37,8 @@ export const SidebarCenterBlock = ({
             isPlaying={isPlaying}
             setError={setError}
             setIsPlaying={setIsPlaying}
+            dataFilter={dataFilter}
+            setNumberTracks={setNumberTracks}
           />
         )}
       </S.CenterBlockContent>

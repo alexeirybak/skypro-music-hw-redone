@@ -5,6 +5,8 @@ import {
   TOGGLE_SHUFFLED,
   ALL_TRACKS,
   FAVORITE_TRACKS,
+  SEARCH,
+  FILTERS,
 } from '../actions/types/types.js';
 
 const initialState = {
@@ -13,6 +15,11 @@ const initialState = {
   shuffledPlaylist: [],
   allTracks: [],
   favoriteTracks: [],
+  letters: '',
+  filters: '',
+  filterByAuthors: [],
+  filterByGenres: [],
+  numberTracks: null,
 };
 
 export default function trackReducer(state = initialState, action) {
@@ -64,6 +71,23 @@ export default function trackReducer(state = initialState, action) {
         ...state,
         shuffled: !shuffled,
         shuffledPlaylist,
+      };
+    }
+
+    case SEARCH: {
+      const { letters } = action.payload;
+      return {
+        ...state,
+        letters,
+      };
+    }
+
+    case FILTERS: {
+      const { filterType, filterValues } = action.payload;
+      return {
+        ...state,
+        filterType,
+        filterValues,
       };
     }
 

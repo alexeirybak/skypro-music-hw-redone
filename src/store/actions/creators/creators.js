@@ -5,6 +5,8 @@ import {
   TOGGLE_SHUFFLED,
   ALL_TRACKS,
   FAVORITE_TRACKS,
+  SEARCH,
+  FILTERS,
 } from '../types/types';
 
 export const setAllTracks = (tracks) => ({
@@ -49,3 +51,20 @@ export const toggleShuffled = (shuffledPlaylist, shuffled) => ({
     shuffled,
   },
 });
+
+export const setSearchTerm = (letters) => ({
+  type: SEARCH,
+  payload: {
+    letters,
+  },
+});
+
+export const setFilter = (filterType, filterValues) => {
+  return {
+    type: FILTERS,
+    payload: {
+      filterType,
+      filterValues,
+    },
+  };
+};

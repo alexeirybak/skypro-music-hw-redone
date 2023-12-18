@@ -1,16 +1,14 @@
 import { useState, useEffect } from 'react';
-import { useContext } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { UserContext } from '../../contexts/UserContext';
 import {
   setAllTracks,
   activeTrack,
   setFavoriteTracks,
+  setSearchTerm
 } from '../../store/actions/creators/creators';
 import { Nav } from '../../components/Nav';
 import { MainSidebar } from '../../components/MainSidebar';
 import { Search } from '../../components/Search';
-import { Filter } from '../../components/Filter';
 import { Footer } from '../../components/Footer';
 import { getFavoriteTracks, disLike } from '../../api/apiGetTracks';
 import { ContentTitle } from '../../components/ContentTitle';
@@ -33,6 +31,9 @@ export const Favorites = ({
   const [disabled, setDisabled] = useState(false);
   const [error, setError] = useState(null);
   const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(setSearchTerm(null));
+  }, []);
 
   const fetchFavoriteTracks = async () => {
     try {
@@ -62,10 +63,8 @@ export const Favorites = ({
     fetchFavoriteTracks();
   }, []);
 
-  const getTrack = useSelector(activeTrack);
-  const currentTrack = getTrack.payload.track.tracks.currentTrack;
-  const favoriteTracks = useSelector(setFavoriteTracks);
-  let music = favoriteTracks.payload.tracks.tracks.favoriteTracks;
+  const currentTrack = useSelector((state) => state.tracks.currentTrack);
+  let music = useSelector((state) => state.tracks.favoriteTracks);
 
   if (isLoading) {
     music = [...Array(12)].flatMap(() => tracks);
@@ -99,9 +98,20 @@ export const Favorites = ({
     }
   };
 
-  const fullPlayList = music.map((item, i) => {
+  const symbols = useSelector((state) => state.tracks.letters);
+  let filteredMusic = music;
+
+  if (symbols) {
+    filteredMusic = music.filter(
+      (item) =>
+        item.name.toLowerCase().includes(symbols.toLowerCase()) ||
+        item.author.toLowerCase().includes(symbols.toLowerCase()) ||
+        item.album.toLowerCase().includes(symbols.toLowerCase()),
+    );
+  }
+
+  const fullPlayList = filteredMusic.map((item, i) => {
     const { name, author, album, duration_in_seconds } = item;
-    const updatedAuthor = author === '-' ? 'Неизвестный' : author;
     const isCurrentPlaying = currentTrack && item.id === currentTrack.id;
 
     return (
@@ -130,7 +140,7 @@ export const Favorites = ({
 
           <S.TrackAuthor>
             {!isLoading ? (
-              <S.TrackAuthorLink>{updatedAuthor}</S.TrackAuthorLink>
+              <S.TrackAuthorLink>{author}</S.TrackAuthorLink>
             ) : (
               <S.SkeletonTrackAuthor></S.SkeletonTrackAuthor>
             )}
@@ -162,7 +172,6 @@ export const Favorites = ({
         <S.MainCenterBlock>
           <Search />
           <S.CenterBlockH2>Любимые треки</S.CenterBlockH2>
-          <Filter error={error} />
           <S.CenterBlockContent>
             <ContentTitle />
             {error ? (

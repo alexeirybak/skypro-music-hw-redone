@@ -17,13 +17,12 @@ import { PlayerBtnShuffleSvg } from '../../utils/iconSVG/playerBtnShuffle';
 import * as S from './styles';
 
 export const PlayerControls = ({
-  trackId,
   isPlaying,
   setIsPlaying,
   setCurrentTime,
   setDuration,
   audioRef,
-  volume
+  volume,
 }) => {
   const [loaded, setLoaded] = useState(false);
   const [isLoop, setIsLoop] = useState(false);
@@ -35,9 +34,11 @@ export const PlayerControls = ({
   const [trackHistory, setTrackHistory] = useState([]);
   const getTrack = useSelector(activeTrack);
   const allTracks = useSelector(setAllTracks);
-  
+
   let music = allTracks.payload.tracks.tracks.allTracks;
   const currentTrack = getTrack.payload.track.tracks.currentTrack;
+  
+
 
   useEffect(() => {
     const newIndex = shuffleTrackEnable
