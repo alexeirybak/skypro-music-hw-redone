@@ -2,7 +2,7 @@ import { NavLink } from 'react-router-dom';
 import { SidebarPlayLists } from '../../components/SidebarPlayLists';
 import * as S from './styles';
 
-export const NotFound = ({ isLoading }) => {
+export const NotFound = () => {
   return (
     <S.Block404>
       <S.Img src='/img/404.gif' />
@@ -12,9 +12,6 @@ export const NotFound = ({ isLoading }) => {
       <NavLink to='/'>
         <S.GoToMain>На главную</S.GoToMain>
       </NavLink>
-      <S.BlockPlayLists>
-        <SidebarPlayLists isLoading={isLoading} />
-      </S.BlockPlayLists>
     </S.Block404>
   );
 };

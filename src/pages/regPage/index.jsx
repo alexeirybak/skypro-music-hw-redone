@@ -1,4 +1,4 @@
-import { useEffect, useState,useContext } from 'react';
+import { useEffect, useState, useContext } from 'react';
 import { UserContext } from '../../contexts/UserContext';
 import { Link } from 'react-router-dom';
 import { RegUser } from '../../api/authApi';
@@ -11,15 +11,7 @@ export function RegPage() {
   const [password, setPassword] = useState('');
   const [repeatPassword, setRepeatPassword] = useState('');
   const [primaryButton, setPrimaryButton] = useState(false);
-  const [isLoginMode, setIsLoginMode] = useState(false);
   const navigate = useNavigate();
-
-  useEffect(() => {
-    const isLoginModeFromStorage = JSON.parse(
-      localStorage.getItem('isLoginMode'),
-    );
-    setIsLoginMode(isLoginModeFromStorage || false);
-  }, []);
 
   const { setUser } = useContext(UserContext);
 
@@ -32,7 +24,6 @@ export function RegPage() {
         setPrimaryButton(true);
         setUser(result.username);
         localStorage.setItem('user', JSON.stringify(result.username));
-        setIsLoginMode(true);
         navigate('/');
       } catch (error) {
         setError(error.message);
@@ -50,7 +41,7 @@ export function RegPage() {
 
   useEffect(() => {
     setError(null);
-  }, [isLoginMode, email, password, repeatPassword]);
+  }, [email, password, repeatPassword]);
 
   return (
     <S.PageContainer>
@@ -99,6 +90,9 @@ export function RegPage() {
             <S.PrimaryButton onClick={handleRegister} disabled={primaryButton}>
               {primaryButton ? 'Загрузка...' : 'Зарегистрироваться'}
             </S.PrimaryButton>
+            <Link to='/login'>
+              <S.SecondaryButton>Уже зарегистрирован</S.SecondaryButton>
+            </Link>
           </S.Buttons>
         </>
       </S.ModalForm>

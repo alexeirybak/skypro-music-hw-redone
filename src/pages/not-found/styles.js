@@ -15,7 +15,7 @@ export const Img = styled.img`
 `;
 
 export const Sign = styled.h1`
-  font-size: 22px;
+  font-size: 1.375rem;
   color: var(--main-content);
   text-align: center;
 `;

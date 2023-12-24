@@ -2,7 +2,6 @@ import styled from 'styled-components';
 import { NavLink } from 'react-router-dom';
 
 export const SidebarPersonal = styled.div`
-  display: -webkit-box;
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -13,7 +12,7 @@ export const SidebarPersonal = styled.div`
 export const SidebarPersonalName = styled.p`
   font-style: normal;
   font-weight: 400;
-  font-size: 16px;
+  font-size: 1rem;
   line-height: 24px;
   color: var(--main-text);
   margin-right: 16px;
@@ -21,5 +20,6 @@ export const SidebarPersonalName = styled.p`
 
 export const ButtonLogout = styled(NavLink)`
   background-color: var(--container);
+  transition: background-color 0.5s ease;
   border: none;
 `;

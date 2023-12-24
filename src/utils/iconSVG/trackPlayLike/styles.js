@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 
 export const TrackPlayLikeImg = styled.svg`
   height: 12px;
@@ -6,14 +6,14 @@ export const TrackPlayLikeImg = styled.svg`
   width: 14px;
   fill: transparent;
   path {
-    fill: var(--container);
+    fill: ${(props) => (props.$isLiked ? '#b672ff' : 'transparent')};
     stroke: var(--player-btn-repeat-shuffle);
+    transition: fill 0.3s; // Добавляем плавный переход при изменении fill
   }
   &:hover path {
-    stroke: var(--player-btn-repeat-shuffle-hover);
+    fill: ${(props) => (props.$isLiked ? 'transparent' : '#b672ff')};
   }
   &:active path {
-    fill: var(--like-active-fill);
-    stroke: var(--like-active-stroke);
+    fill: transparent;
   }
 `;

@@ -20,6 +20,7 @@ export const PlayerBtnPrev = styled.div`
 
 export const PlayerBtnPlay = styled.div`
   ${PlayerButtonMixin};
+  width: 25px;
   margin-right: 23px;
 `;
 
