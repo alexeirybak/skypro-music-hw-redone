@@ -6,9 +6,10 @@ export const ErrorBlock = styled.div`
   align-items: center;
 `;
 
-export const ErrorMessage = styled.p`
+export const ErrorMessage = styled.div`
   font-size: 1.5rem;
   color: #ad61ff;
+  padding-top: 20px;
 `;
 
 export const Img = styled.img`

@@ -6,4 +6,6 @@ export const ALL_TRACKS = 'ALL_TRACKS';
 export const FAVORITE_TRACKS = "FAVORITE_TRACKS";
 export const SEARCH = "SEARCH";
 export const FILTERS = "FILTERS";
-export const SET_LIKE_STATE = 'SET_LIKE_STATE'
+export const SET_LIKE_STATE = 'SET_LIKE_STATE';
+export const SET_LOADING = 'SET_LOADING'
+export const SET_PLAYING = 'SET_PLAYING'

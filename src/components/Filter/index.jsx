@@ -5,7 +5,6 @@ import { releaseDateFormatter } from '../../utils/releaseDateFormatter';
 import * as S from './styles';
 
 export const Filter = ({
-  isLoading,
   error,
   setDataFilter,
   dataFilter,
@@ -69,7 +68,7 @@ export const Filter = ({
         <S.FilterButton
           as={openMenu === 'author' && S.BtnTextActive}
           onClick={() => handleMenuClick('author')}
-          disabled={error || isLoading}
+          disabled={error}
         >
           исполнителю
         </S.FilterButton>
@@ -97,7 +96,7 @@ export const Filter = ({
         <S.FilterButton
           as={openMenu === 'year' && S.BtnTextActive}
           onClick={() => toggleMenu('year')}
-          disabled={error || isLoading}
+          disabled={error}
         >
           году выпуска
         </S.FilterButton>
@@ -123,7 +122,7 @@ export const Filter = ({
         <S.FilterButton
           as={openMenu === 'genre' && S.BtnTextActive}
           onClick={() => handleMenuClick('genre')}
-          disabled={error || isLoading}
+          disabled={error}
         >
           жанру
         </S.FilterButton>

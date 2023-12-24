@@ -76,7 +76,7 @@ const Button = styled.button`
 `;
 
 export const PrimaryButton = styled(Button)`
-  color: #ffffff;
+  color: #fff;
   background-color: #580ea2;
   &:hover {
     background-color: #3f007d;

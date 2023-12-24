@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { NavLink } from 'react-router-dom';
+import { NavLink, Outlet } from 'react-router-dom';
 import { useContext} from 'react';
 import { UserContext } from '../../contexts/UserContext';
 import { SwitchTheme } from '../SwitchTheme';

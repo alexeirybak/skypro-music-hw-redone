@@ -4,12 +4,10 @@ import {
   setAllTracks,
   activeTrack,
   setFavoriteTracks,
-  setSearchTerm
+  setSearchTerm,
+  setLoading, 
+  setPlaying
 } from '../../store/actions/creators/creators';
-import { Nav } from '../../components/Nav';
-import { MainSidebar } from '../../components/MainSidebar';
-import { Search } from '../../components/Search';
-import { Footer } from '../../components/Footer';
 import { getFavoriteTracks, disLike } from '../../api/apiGetTracks';
 import { ContentTitle } from '../../components/ContentTitle';
 import { ErrorBlock } from '../../components/ErrorBlock';
@@ -18,19 +16,16 @@ import { durationFormatter } from '../../utils/durationFormatter';
 import { tracks } from '../../constants';
 import { TrackTitleSvg } from '../../utils/iconSVG/trackTitle';
 import { TrackLikesMainSvg } from '../../utils/iconSVG/trackLikeMain';
-import * as S from '../../components/PlayList/styles';
+import * as S from '../../pages/PlayList/styles';
 
-export const Favorites = ({
-  isPlaying,
-  setIsPlaying,
-  isLoading,
-  setIsLoading,
-}) => {
+export const Favorites = () => {
   const tokenRefresh = JSON.parse(localStorage.getItem('tokenRefresh'));
   let tokenAccess = JSON.parse(localStorage.getItem('tokenAccess'));
   const [disabled, setDisabled] = useState(false);
   const [error, setError] = useState(null);
   const dispatch = useDispatch();
+  const isLoading = useSelector((state) => state.tracks.isLoading);
+
   useEffect(() => {
     dispatch(setSearchTerm(null));
   }, []);
@@ -46,17 +41,17 @@ export const Favorites = ({
       }
       dispatch(setFavoriteTracks(favoriteTracks));
       dispatch(setAllTracks(favoriteTracks));
-      setIsLoading(true);
+      dispatch(setLoading(false));
     } catch (error) {
       if (error.message === 'Токен протух') { 
       const newAccess = await refreshToken(tokenRefresh);
       localStorage.setItem('tokenAccess', JSON.stringify(newAccess));
       const favoriteTracks = await getFavoriteTracks(newAccess.access);
       dispatch(setFavoriteTracks(favoriteTracks));
-      setIsLoading(false);
+      dispatch(setLoading(true));
       setError(error.message);}
     } finally {
-      setIsLoading(false);
+      dispatch(setLoading(false));
     }
   };
 
@@ -73,7 +68,7 @@ export const Favorites = ({
 
   const handleTrackClick = (item) => {
     dispatch(activeTrack(item));
-    setIsPlaying(true);
+    dispatch(setPlaying(true));
   };
 
   const toggleLike = async (item) => {
@@ -123,7 +118,6 @@ export const Favorites = ({
               {!isLoading ? (
                 <TrackTitleSvg
                   isCurrentPlaying={isCurrentPlaying}
-                  isPlaying={isPlaying}
                 />
               ) : (
                 <S.SkeletonIcon></S.SkeletonIcon>
@@ -166,25 +160,17 @@ export const Favorites = ({
     );
   });
 
-  return (
-    <S.Wrapper>
-      <S.Container>
-        <Nav />
-        <S.MainCenterBlock>
-          <Search />
-          <S.CenterBlockH2>Любимые треки</S.CenterBlockH2>
-          <S.CenterBlockContent $isPlaying={isPlaying}>
-            <ContentTitle />
-            {error ? (
-              <ErrorBlock error={error} />
-            ) : (
-              <S.ContentPlayList>{fullPlayList}</S.ContentPlayList>
-            )}
-          </S.CenterBlockContent>
-        </S.MainCenterBlock>
-        <MainSidebar isLoading={isLoading} />
-        <Footer />
-      </S.Container>
-    </S.Wrapper>
-  );
-};
+  return ( 
+      <>
+      <S.CenterBlockH2>Любимые треки</S.CenterBlockH2>
+      <S.CenterBlockContent>
+        <ContentTitle />
+        {error ? (
+          <ErrorBlock error={error} />
+        ) : (
+          <S.ContentPlayList>{fullPlayList}</S.ContentPlayList>
+        )}
+      </S.CenterBlockContent>
+      </>
+    );
+  };

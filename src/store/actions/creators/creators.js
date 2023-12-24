@@ -8,6 +8,8 @@ import {
   SEARCH,
   FILTERS,
   SET_LIKE_STATE,
+  SET_LOADING,
+  SET_PLAYING
 } from '../types/types';
 
 export const setAllTracks = (tracks) => ({
@@ -72,5 +74,19 @@ export const setLikeState = (isLiked) => ({
   type: SET_LIKE_STATE,
   payload: {
     isLiked,
+  },
+});
+
+export const setLoading = (isLoading) => ({
+  type: SET_LOADING,
+  payload: {
+    isLoading,
+  },
+});
+
+export const setPlaying = (isPlaying) => ({
+  type: SET_PLAYING,
+  payload: {
+    isPlaying,
   },
 });

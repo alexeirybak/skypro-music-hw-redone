@@ -1,18 +1,16 @@
+import { useDispatch, useSelector } from 'react-redux';
 import { useState, useRef } from 'react';
 import { ProgressBar } from '../ProgressBar';
 import { BarPlayer } from '../BarPlayer';
 import { VolumeBlock } from '../VolumeBlock';
 import * as S from './styles';
 
-export const Player = ({
-  isLoading,
-  isPlaying,
-  setIsPlaying,
-}) => {
+export const Player = () => {
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
   const audioRef = useRef(null);
   const [volume, setVolume] = useState(0.5);
+  const isPlaying = useSelector((state) => state.tracks.isPlaying);
 
   const handleSeek = (newTime) => {
     setCurrentTime(newTime);
@@ -30,13 +28,9 @@ export const Player = ({
           duration={duration}
           setDuration={setDuration}
           onSeek={handleSeek}
-          isPlaying={isPlaying}
         />
         <S.BarPlayerBlock>
           <BarPlayer
-            isLoading={isLoading}
-            isPlaying={isPlaying}
-            setIsPlaying={setIsPlaying}
             currentTime={currentTime}
             setCurrentTime={setCurrentTime}
             duration={duration}

@@ -1,6 +1,5 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useContext } from 'react';
 import { UserContext } from '../../contexts/UserContext';
 import {
   activeTrack,
@@ -8,25 +7,27 @@ import {
   setSearchTerm,
   setFilter,
   setLikeState,
+  setLoading,
+  setPlaying
 } from '../../store/actions/creators/creators';
 import { addLike, disLike } from '../../api/apiGetTracks';
 import { getAllTracks } from '../../api/apiGetTracks';
 import { refreshToken } from '../../api/authApi';
+import { Filter } from '../../components/Filter';
+import { ContentTitle } from '../../components/ContentTitle';
 import { durationFormatter } from '../../utils/durationFormatter';
 import { tracks } from '../../constants';
 import { TrackTitleSvg } from '../../utils/iconSVG/trackTitle';
 import { TrackLikesMainSvg } from '../../utils/iconSVG/trackLikeMain';
+import { ErrorBlock } from '../../components/ErrorBlock';
 import * as S from './styles';
 
-export const PlayList = ({
-  isLoading,
-  setIsLoading,
-  isPlaying,
-  setIsPlaying,
-  setError,
-  dataFilter,
-  setNumberTracks,
-}) => {
+export const PlayList = () => {
+
+  const [error, setError] = useState(null);
+  const [dataFilter, setDataFilter] = useState('По умолчанию');
+  const [numberTracks, setNumberTracks] = useState(null);
+
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -38,17 +39,20 @@ export const PlayList = ({
     try {
       const tracks = await getAllTracks();
       dispatch(setAllTracks(tracks));
-      setIsLoading(true);
+      dispatch(setLoading(false));
       setError(false);
     } catch (error) {
-      setIsLoading(false);
+      dispatch(setLoading(true));
       setError(error.message);
     } finally {
-      setIsLoading(false);
+      dispatch(setLoading(false));
     }
   };
 
-  useEffect(() => {
+  const isLoading = useSelector((state) => state.tracks.isLoading);
+  const isPlaying = useSelector((state) => state.tracks.isPlaying);
+
+  useEffect(() => { 
     fetchTracks();
   }, []);
 
@@ -97,7 +101,7 @@ export const PlayList = ({
 
   const handleTrackClick = (item) => {
     dispatch(activeTrack(item));
-    setIsPlaying(true);
+    dispatch(setPlaying(true));
   };
 
   let filteredMusic = [...music];
@@ -208,7 +212,8 @@ export const PlayList = ({
             )}
           </S.TrackAlbum>
           <S.TrackTimeComponent>
-            <S.LikeButton disabled={disabled} onClick={() => toggleLike(item)}>
+            <S.LikeButton disabled={disabled} 
+              onClick={() => toggleLike(item)}>
               <TrackLikesMainSvg isLiked={isLiked} />
             </S.LikeButton>
             <S.TrackTimeText>
@@ -220,5 +225,25 @@ export const PlayList = ({
     );
   });
 
-  return <S.ContentPlayList>{fullPlayList}</S.ContentPlayList>;
+  return (
+    <>
+      {error ? (
+        <ErrorBlock error={error} />
+      ) : (
+        <>
+          <S.CenterBlockH2>Треки</S.CenterBlockH2>
+          <Filter 
+            error={error}
+            setDataFilter={setDataFilter}
+            dataFilter={dataFilter}
+            numberTracks={numberTracks}
+          />
+          <S.CenterBlockContent>
+            <ContentTitle />
+            <S.ContentPlayList>{fullPlayList}</S.ContentPlayList>
+          </S.CenterBlockContent>
+        </>
+      )}
+    </>
+  );
 };

@@ -1,7 +1,6 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect, useState } from 'react';
-import { activeTrack } from '../../store/actions/creators/creators';
-import { setAllTracks } from '../../store/actions/creators/creators';
+import { activeTrack, setAllTracks, setPlaying } from '../../store/actions/creators/creators';
 import { getAllTracks } from '../../api/apiGetTracks';
 import { refreshToken } from '../../api/authApi';
 import { addLike } from '../../api/apiGetTracks';
@@ -10,13 +9,16 @@ import { TrackPlaySvg } from '../../utils/iconSVG/trackPlay';
 import { TrackPlayLikeSvg } from '../../utils/iconSVG/trackPlayLike';
 import * as S from './styles';
 
-export const PlayerTrackPlay = ({ isLoading, isPlaying, setIsPlaying }) => {
+export const PlayerTrackPlay = () => {
+
+  const isPlaying = useSelector((state) => state.tracks.isPlaying);
+
   useEffect(() => {
-    setIsPlaying(isPlaying);
+    dispatch(setPlaying(isPlaying));
   }, [isPlaying]);
 
   const dispatch = useDispatch();
-
+  const isLoading = useSelector((state) => state.tracks.isLoading);
   const [disabled, setDisabled] = useState(false);
   const getTrack = useSelector(activeTrack);
   const currentTrack = getTrack.payload.track.tracks.currentTrack;

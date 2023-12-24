@@ -1,11 +1,11 @@
 import { useState, useEffect } from 'react';
-import { getTrackById } from '../../api/apiGetTracks';
 import {
   activeTrack,
   nextTrack,
   prevTrack,
   toggleShuffled,
   setAllTracks,
+  setPlaying
 } from '../../store/actions/creators/creators';
 import { useDispatch, useSelector } from 'react-redux';
 import { PlayerBtnPrevSvg } from '../../utils/iconSVG/playerBtnPrev';
@@ -17,8 +17,6 @@ import { PlayerBtnShuffleSvg } from '../../utils/iconSVG/playerBtnShuffle';
 import * as S from './styles';
 
 export const PlayerControls = ({
-  isPlaying,
-  setIsPlaying,
   setCurrentTime,
   setDuration,
   audioRef,
@@ -34,12 +32,11 @@ export const PlayerControls = ({
   const [trackHistory, setTrackHistory] = useState([]);
   const getTrack = useSelector(activeTrack);
   const allTracks = useSelector(setAllTracks);
+  const isPlaying = useSelector((state) => state.tracks.isPlaying);
 
   let music = allTracks.payload.tracks.tracks.allTracks;
   const currentTrack = getTrack.payload.track.tracks.currentTrack;
   
-
-
   useEffect(() => {
     const newIndex = shuffleTrackEnable
       ? shuffledTracks.findIndex((item) => item.id === currentTrack.id)
@@ -61,7 +58,7 @@ export const PlayerControls = ({
   const handleStart = () => {
     if (loaded) {
       audioRef.current.play();
-      setIsPlaying(true);
+      dispatch(setPlaying(true));
     }
   };
 
@@ -210,8 +207,8 @@ export const PlayerControls = ({
       <audio
         ref={audioRef}
         src={currentTrack.track_file}
-        onPlay={() => setIsPlaying(true)}
-        onPause={() => setIsPlaying(false)}
+        onPlay={() => dispatch(setPlaying(true))}
+        onPause={() => dispatch(setPlaying(false))}
         loop={isLoop}
         onEnded={handleNextTrack}
         onLoadedMetadata={() => setDuration(audioRef.current.duration)}
@@ -225,7 +222,7 @@ export const PlayerControls = ({
         <S.PlayerBtnPlay
           onClick={() => {
             if (loaded) {
-              setIsPlaying(!isPlaying);
+              dispatch(setPlaying(!isPlaying));
             }
           }}
         >

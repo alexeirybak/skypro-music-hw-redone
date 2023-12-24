@@ -8,6 +8,8 @@ import {
   SEARCH,
   FILTERS,
   SET_LIKE_STATE,
+  SET_LOADING,
+  SET_PLAYING
 } from '../actions/types/types.js';
 
 const initialState = {
@@ -21,6 +23,8 @@ const initialState = {
   filterByAuthors: [],
   filterByGenres: [],
   isLiked: null,
+  isLoading: true,
+  isPlaying: false
 };
 
 export default function trackReducer(state = initialState, action) {
@@ -35,7 +39,6 @@ export default function trackReducer(state = initialState, action) {
 
     case FAVORITE_TRACKS: {
       const { tracks } = action.payload;
-
       return {
         ...state,
         favoriteTracks: tracks,
@@ -96,7 +99,23 @@ export default function trackReducer(state = initialState, action) {
       const { isLiked } = action.payload;
       return {
         ...state,
-        isLiked: isLiked,
+        isLiked,
+      };
+    }
+
+    case SET_LOADING: {
+      const { isLoading } = action.payload;
+      return {
+        ...state,
+        isLoading,
+      };
+    }
+
+    case SET_PLAYING: {
+      const { isPlaying } = action.payload;
+      return {
+        ...state,
+        isPlaying,
       };
     }
     

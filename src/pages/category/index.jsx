@@ -7,11 +7,9 @@ import {
   activeTrack,
   setSearchTerm,
   setLikeState,
+  setLoading,
+  setPlaying
 } from '../../store/actions/creators/creators';
-import { Nav } from '../../components/Nav';
-import { MainSidebar } from '../../components/MainSidebar';
-import { Search } from '../../components/Search';
-import { Footer } from '../../components/Footer';
 import { addLike, disLike, getCategory } from '../../api/apiGetTracks';
 import { ContentTitle } from '../../components/ContentTitle';
 import { ErrorBlock } from '../../components/ErrorBlock';
@@ -22,9 +20,9 @@ import { TrackTitleSvg } from '../../utils/iconSVG/trackTitle';
 import { TrackLikesMainSvg } from '../../utils/iconSVG/trackLikeMain';
 import { useParams } from 'react-router-dom';
 import { musicCategory } from '../../constants';
-import * as S from '../../components/PlayList/styles';
+import * as S from '../../pages/PlayList/styles';
 
-export function Category({ isPlaying, setIsPlaying, isLoading, setIsLoading }) {
+export function Category() {
   const params = useParams();
   const category = musicCategory.find(
     (category) => category.id === Number(params.id),
@@ -32,7 +30,16 @@ export function Category({ isPlaying, setIsPlaying, isLoading, setIsLoading }) {
   const tokenRefresh = JSON.parse(localStorage.getItem('tokenRefresh'));
   let tokenAccess = JSON.parse(localStorage.getItem('tokenAccess'));
   const [error, setError] = useState(null);
+  const { user } = useContext(UserContext);
+  const [disabled, setDisabled] = useState(false);
+
   const dispatch = useDispatch();
+  const symbols = useSelector((state) => state.tracks.letters);
+  const isLoading = useSelector((state) => state.tracks.isLoading);
+  const isPlaying = useSelector((state) => state.tracks.isPlaying);
+  const currentTrack = useSelector((state) => state.tracks.currentTrack);
+  let music = useSelector((state) => state.tracks.allTracks);
+
   useEffect(() => {
     dispatch(setSearchTerm(null));
   }, []);
@@ -45,13 +52,13 @@ export function Category({ isPlaying, setIsPlaying, isLoading, setIsLoading }) {
         return { ...rest, stared_user: stared_user };
       });
       dispatch(setAllTracks(newArray));
-      setIsLoading(true);
+      dispatch(setLoading(false));
       setError(false);
     } catch (error) {
-      setIsLoading(false);
+      dispatch(setLoading(true));
       setError(error.message);
     } finally {
-      setIsLoading(false);
+      dispatch(setLoading(false));
     }
   };
 
@@ -59,18 +66,13 @@ export function Category({ isPlaying, setIsPlaying, isLoading, setIsLoading }) {
     fetchTracks();
   }, [params.id]);
 
-  const { user } = useContext(UserContext);
-  const [disabled, setDisabled] = useState(false);
-  const currentTrack = useSelector((state) => state.tracks.currentTrack);
-  let music = useSelector((state) => state.tracks.allTracks);
-
   if (isLoading) {
     music = [...Array(12)].flatMap(() => tracks);
   }
 
   const handleTrackClick = (item) => {
     dispatch(activeTrack(item));
-    setIsPlaying(true);
+    setPlaying(true);
   };
 
   const toggleLike = async (item) => {
@@ -103,7 +105,6 @@ export function Category({ isPlaying, setIsPlaying, isLoading, setIsLoading }) {
     }
   };
 
-  const symbols = useSelector((state) => state.tracks.letters);
   let filteredMusic = music;
 
   if (symbols) {
@@ -130,7 +131,6 @@ export function Category({ isPlaying, setIsPlaying, isLoading, setIsLoading }) {
               {!isLoading ? (
                 <TrackTitleSvg
                   isCurrentPlaying={isCurrentPlaying}
-                  isPlaying={isPlaying}
                 />
               ) : (
                 <S.SkeletonIcon></S.SkeletonIcon>
@@ -174,24 +174,16 @@ export function Category({ isPlaying, setIsPlaying, isLoading, setIsLoading }) {
   });
 
   return (
-    <S.Wrapper>
-      <S.Container>
-        <Nav />
-        <S.MainCenterBlock>
-          <Search />
-          <S.CenterBlockH2>{category.alt}</S.CenterBlockH2>
-          <S.CenterBlockContent $isPlaying={isPlaying}>
-            <ContentTitle />
-            {error ? (
-              <ErrorBlock error={error} />
-            ) : (
-              <S.ContentPlayList>{fullPlayList}</S.ContentPlayList>
-            )}
-          </S.CenterBlockContent>
-        </S.MainCenterBlock>
-        <MainSidebar isLoading={isLoading} />
-        <Footer />
-      </S.Container>
-    </S.Wrapper>
+      <>
+        <S.CenterBlockH2>{category.alt}</S.CenterBlockH2>
+        <S.CenterBlockContent $isPlaying={isPlaying}>
+          <ContentTitle />
+          {error ? (
+            <ErrorBlock error={error} />
+          ) : (
+            <S.ContentPlayList>{fullPlayList}</S.ContentPlayList>
+          )}
+        </S.CenterBlockContent>
+      </>
   );
 }
