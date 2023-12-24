@@ -6,8 +6,6 @@ import { getAllTracks } from '../../api/apiGetTracks';
 import { refreshToken } from '../../api/authApi';
 import { addLike } from '../../api/apiGetTracks';
 import { disLike } from '../../api/apiGetTracks';
-import { useContext } from 'react';
-import { UserContext } from '../../contexts/UserContext';
 import { TrackPlaySvg } from '../../utils/iconSVG/trackPlay';
 import { TrackPlayLikeSvg } from '../../utils/iconSVG/trackPlayLike';
 import * as S from './styles';
@@ -17,18 +15,25 @@ export const PlayerTrackPlay = ({ isLoading, isPlaying, setIsPlaying }) => {
     setIsPlaying(isPlaying);
   }, [isPlaying]);
 
-  const { user } = useContext(UserContext);
+  const dispatch = useDispatch();
+
   const [disabled, setDisabled] = useState(false);
   const getTrack = useSelector(activeTrack);
   const currentTrack = getTrack.payload.track.tracks.currentTrack;
-  const [isLiked, setIsLiked] = useState(
-    currentTrack.stared_user?.some((staredUser) => staredUser.id === user.id) ||
-      true,
-  );
+  const [isLiked, setIsLiked] = useState(null);
+
+  const isLikedTracks = useSelector((state) => state.tracks.isLiked);
+  useEffect(() => {
+    if (isLikedTracks) {
+      setIsLiked(true);
+    } else {
+      setIsLiked(false);
+    }
+  }, [isLikedTracks]);
+
   const tokenRefresh = JSON.parse(localStorage.getItem('tokenRefresh'));
   const tokenAccess = JSON.parse(localStorage.getItem('tokenAccess'));
-  const dispatch = useDispatch();
-  
+
   const toggleLike = async (item = currentTrack) => {
     try {
       setDisabled(true);

@@ -1,11 +1,14 @@
 import styled, { keyframes } from 'styled-components';
 
 export const SidebarBlock = styled.div`
-  height: 100%;
-  padding: 70px 0 0;
+  padding: 20px 0;
   display: flex;
   flex-direction: row;
   justify-content: center;
+  margin-bottom: 50px;
+  @media screen and (max-width: 491px) {
+    margin-bottom: 100px;
+  }
 `;
 
 export const SidebarList = styled.div`
@@ -13,6 +16,10 @@ export const SidebarList = styled.div`
   flex-direction: row;
   align-items: center;
   column-gap: 30px;
+  @media screen and (max-width: 897px) {
+    flex-direction: column;
+    row-gap: 20px;
+  }
 `;
 
 export const SidebarItem = styled.div`
@@ -21,7 +28,6 @@ export const SidebarItem = styled.div`
 `;
 
 export const SidebarLink = styled.a`
-  width: 100%;
   height: 100%;
 `;
 

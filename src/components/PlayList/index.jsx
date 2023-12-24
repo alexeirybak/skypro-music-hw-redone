@@ -7,6 +7,7 @@ import {
   setAllTracks,
   setSearchTerm,
   setFilter,
+  setLikeState,
 } from '../../store/actions/creators/creators';
 import { addLike, disLike } from '../../api/apiGetTracks';
 import { getAllTracks } from '../../api/apiGetTracks';
@@ -62,18 +63,15 @@ export const PlayList = ({
     music = [...Array(12)].flatMap(() => tracks);
   }
 
-  const handleTrackClick = (item) => {
-    dispatch(activeTrack(item));
-    setIsPlaying(true);
-  };
-
   const toggleLike = async (item) => {
     try {
       setDisabled(true);
       if (item.stared_user.find((el) => el.id === user.id)) {
         await disLike({ token: tokenAccess, id: item.id });
+        dispatch(setLikeState(false));
       } else {
         await addLike({ token: tokenAccess, id: item.id });
+        dispatch(setLikeState(true));
       }
       const response = await getAllTracks();
       dispatch(setAllTracks(response));
@@ -83,8 +81,10 @@ export const PlayList = ({
         localStorage.setItem('tokenAccess', JSON.stringify(newAccess));
         if (item.stared_user.find((el) => el.id === user.id)) {
           await disLike({ token: newAccess.access, id: item.id });
+          dispatch(setLikeState(false));
         } else {
           await addLike({ token: newAccess.access, id: item.id });
+          dispatch(setLikeState(true));
         }
         const response = await getAllTracks();
         dispatch(setAllTracks(response));
@@ -93,6 +93,11 @@ export const PlayList = ({
     } finally {
       setDisabled(false);
     }
+  };
+
+  const handleTrackClick = (item) => {
+    dispatch(activeTrack(item));
+    setIsPlaying(true);
   };
 
   let filteredMusic = [...music];
@@ -141,6 +146,19 @@ export const PlayList = ({
     }
   }, [filteredMusic, setNumberTracks]);
 
+  useEffect(() => {
+    const isStared =
+      currentTrack &&
+      currentTrack.stared_user &&
+      Array.isArray(currentTrack.stared_user) &&
+      currentTrack.stared_user.some((staredUser) => staredUser.id === user.id);
+    if (isStared) {
+      dispatch(setLikeState(true));
+    } else {
+      dispatch(setLikeState(false));
+    }
+  }, [currentTrack, user]);
+
   const fullPlayList = filteredMusic.map((item, i) => {
     const { name, author, album, duration_in_seconds } = item;
     const isCurrentPlaying = currentTrack && item.id === currentTrack.id;
@@ -165,14 +183,17 @@ export const PlayList = ({
 
             <S.TrackTitleBlock onClick={() => handleTrackClick(item)}>
               {!isLoading ? (
-                <S.TrackTitleLink>{name}</S.TrackTitleLink>
+                <S.TrackTitleNameAuthorLink>
+                  <S.TrackTitleLink>{name}</S.TrackTitleLink>
+                  <S.TrackAuthorLinkMobile>{author}</S.TrackAuthorLinkMobile>
+                </S.TrackTitleNameAuthorLink>
               ) : (
                 <S.SkeletonTrackTitle></S.SkeletonTrackTitle>
               )}
             </S.TrackTitleBlock>
           </S.TrackTitle>
 
-          <S.TrackAuthor>
+          <S.TrackAuthor onClick={() => handleTrackClick(item)}>
             {!isLoading ? (
               <S.TrackAuthorLink>{author}</S.TrackAuthorLink>
             ) : (

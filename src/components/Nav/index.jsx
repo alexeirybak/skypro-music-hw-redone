@@ -30,9 +30,8 @@ export const Nav = () => {
         <S.BurgerLine></S.BurgerLine>
         <S.BurgerLine></S.BurgerLine>
         <S.BurgerLine></S.BurgerLine>
-      </S.NavBurger>
 
-      <S.MenuContent $menuVisible={menuVisible}>
+        <S.MenuContent $menuVisible={menuVisible}>
         <S.MenuList>
           <S.MenuItem>
             <S.MenuLink to='/'>
@@ -54,6 +53,8 @@ export const Nav = () => {
           </S.MenuItem>
         </S.MenuList>
       </S.MenuContent>
+      </S.NavBurger>
+      
       <SwitchTheme />
     </S.MainNav>
   );

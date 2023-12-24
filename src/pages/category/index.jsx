@@ -5,7 +5,8 @@ import { UserContext } from '../../contexts/UserContext';
 import {
   setAllTracks,
   activeTrack,
-  setSearchTerm
+  setSearchTerm,
+  setLikeState,
 } from '../../store/actions/creators/creators';
 import { Nav } from '../../components/Nav';
 import { MainSidebar } from '../../components/MainSidebar';
@@ -19,9 +20,9 @@ import { durationFormatter } from '../../utils/durationFormatter';
 import { tracks } from '../../constants';
 import { TrackTitleSvg } from '../../utils/iconSVG/trackTitle';
 import { TrackLikesMainSvg } from '../../utils/iconSVG/trackLikeMain';
-import * as S from './styles';
 import { useParams } from 'react-router-dom';
 import { musicCategory } from '../../constants';
+import * as S from '../../components/PlayList/styles';
 
 export function Category({ isPlaying, setIsPlaying, isLoading, setIsLoading }) {
   const params = useParams();
@@ -77,8 +78,10 @@ export function Category({ isPlaying, setIsPlaying, isLoading, setIsLoading }) {
       setDisabled(true);
       if (item.stared_user.find((el) => el.id === user.id)) {
         await disLike({ token: tokenAccess, id: item.id });
+        dispatch(setLikeState(false));
       } else {
         await addLike({ token: tokenAccess, id: item.id });
+        dispatch(setLikeState(true));
       }
     } catch (error) {
       if (error.message === 'Токен протух') {
@@ -87,8 +90,10 @@ export function Category({ isPlaying, setIsPlaying, isLoading, setIsLoading }) {
         tokenAccess = newAccess.access;
         if (item.stared_user.find((el) => el.id === user.id)) {
           await disLike({ token: newAccess.access, id: item.id });
+          dispatch(setLikeState(false));
         } else {
           await addLike({ token: newAccess.access, id: item.id });
+          dispatch(setLikeState(true));
         }
         return;
       }
@@ -141,7 +146,7 @@ export function Category({ isPlaying, setIsPlaying, isLoading, setIsLoading }) {
             </S.TrackTitleBlock>
           </S.TrackTitle>
 
-          <S.TrackAuthor>
+          <S.TrackAuthor onClick={() => handleTrackClick(item)}>
             {!isLoading ? (
               <S.TrackAuthorLink>{author}</S.TrackAuthorLink>
             ) : (
@@ -175,7 +180,7 @@ export function Category({ isPlaying, setIsPlaying, isLoading, setIsLoading }) {
         <S.MainCenterBlock>
           <Search />
           <S.CenterBlockH2>{category.alt}</S.CenterBlockH2>
-          <S.CenterBlockContent>
+          <S.CenterBlockContent $isPlaying={isPlaying}>
             <ContentTitle />
             {error ? (
               <ErrorBlock error={error} />

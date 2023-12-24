@@ -15,10 +15,11 @@ export const Filter = ({
   const dispatch = useDispatch();
   const [selectedAuthors, setSelectedAuthors] = useState([]);
   const [selectedGenres, setSelectedGenres] = useState([]);
-  const [activeAuthors, setActiveAuthors] = useState(true);
-  const [activeGenres, setActiveGenres] = useState(true);
+  const [activeAuthors, setActiveAuthors] = useState(false);
+  const [activeGenres, setActiveGenres] = useState(false);
 
   const handleAuthorClick = (author) => {
+    setActiveGenres(false);
     setSelectedAuthors((prevSelected) => {
       if (prevSelected.includes(author)) {
         return prevSelected.filter((a) => a !== author);
@@ -26,10 +27,10 @@ export const Filter = ({
         return [...prevSelected, author];
       }
     });
-    setActiveGenres(false);
   };
 
   const handleGenreClick = (genre) => {
+    setActiveAuthors(false);
     setSelectedGenres((prevSelected) => {
       if (prevSelected.includes(genre)) {
         return prevSelected.filter((g) => g !== genre);
@@ -37,7 +38,6 @@ export const Filter = ({
         return [...prevSelected, genre];
       }
     });
-    setActiveAuthors(false);
   };
 
   useEffect(() => {

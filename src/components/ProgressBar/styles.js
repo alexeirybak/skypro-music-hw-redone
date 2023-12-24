@@ -7,6 +7,7 @@ export const Timer = styled.div`
   column-gap: 10px;
   padding-right: 15px;
   padding-bottom: 10px;
+  background: transparent;
 `;
 
 export const TimerData = styled.p``;

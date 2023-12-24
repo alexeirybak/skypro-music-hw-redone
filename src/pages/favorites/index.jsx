@@ -18,7 +18,7 @@ import { durationFormatter } from '../../utils/durationFormatter';
 import { tracks } from '../../constants';
 import { TrackTitleSvg } from '../../utils/iconSVG/trackTitle';
 import { TrackLikesMainSvg } from '../../utils/iconSVG/trackLikeMain';
-import * as S from './styles';
+import * as S from '../../components/PlayList/styles';
 
 export const Favorites = ({
   isPlaying,
@@ -48,12 +48,13 @@ export const Favorites = ({
       dispatch(setAllTracks(favoriteTracks));
       setIsLoading(true);
     } catch (error) {
+      if (error.message === 'Токен протух') { 
       const newAccess = await refreshToken(tokenRefresh);
       localStorage.setItem('tokenAccess', JSON.stringify(newAccess));
       const favoriteTracks = await getFavoriteTracks(newAccess.access);
       dispatch(setFavoriteTracks(favoriteTracks));
       setIsLoading(false);
-      setError(error.message);
+      setError(error.message);}
     } finally {
       setIsLoading(false);
     }
@@ -138,7 +139,7 @@ export const Favorites = ({
             </S.TrackTitleBlock>
           </S.TrackTitle>
 
-          <S.TrackAuthor>
+          <S.TrackAuthor onClick={() => handleTrackClick(item)}>
             {!isLoading ? (
               <S.TrackAuthorLink>{author}</S.TrackAuthorLink>
             ) : (
@@ -172,7 +173,7 @@ export const Favorites = ({
         <S.MainCenterBlock>
           <Search />
           <S.CenterBlockH2>Любимые треки</S.CenterBlockH2>
-          <S.CenterBlockContent>
+          <S.CenterBlockContent $isPlaying={isPlaying}>
             <ContentTitle />
             {error ? (
               <ErrorBlock error={error} />

@@ -5,6 +5,9 @@ export const BarVolumeBlock = styled.div`
   display: flex;
   align-items: center;
   padding: 0 92px 0 0;
+  @media screen and (max-width: 768px) {
+    padding: 0 30px 0 0;
+  }
 `;
 
 export const VolumeContent = styled.div`
@@ -45,5 +48,5 @@ export const MutedText = styled.p`
   left: 50%;
   transform: translate(-50%, -50%);
   margin: 0; 
-  font-size: 18px;
+  font-size: 1.125rem;
 `;

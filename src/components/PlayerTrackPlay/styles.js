@@ -11,12 +11,16 @@ export const TrackPlayerContain = styled.div`
   grid-template-columns: auto 1fr;
   grid-template-areas: 'image author' 'image album';
   align-items: center;
+  @media screen and (max-width: 768px) {
+    display: none;
+  }
 `;
 
 export const TrackPlayerImage = styled.div`
   width: 51px;
   height: 51px;
   background-color: var(--title-track-img);
+  transition: background-color 0.5s ease;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -26,7 +30,7 @@ export const TrackPlayerImage = styled.div`
   grid-area: image;
 `;
 
-export const TrackPlayerBlock = styled.div``
+export const TrackPlayerBlock = styled.div``;
 
 const blink = keyframes`
     from {
@@ -75,10 +79,13 @@ export const TrackPlayAuthor = styled.div`
 export const TrackPlayAuthorLink = styled.a`
   font-style: normal;
   font-weight: 400;
-  font-size: 16px;
+  font-size: 1rem;
   line-height: 24px;
   color: var(--main-text);
   white-space: nowrap;
+  @media screen and (max-width: 471px) {
+    line-height: 12px;
+  }
 `;
 
 export const TrackPlayAlbum = styled.div`
@@ -91,7 +98,7 @@ export const TrackPlayAlbum = styled.div`
 export const TrackPlayAlbumLink = styled.a`
   font-style: normal;
   font-weight: 400;
-  font-size: 13px;
+  font-size: 0.8125rem;
   line-height: 24px;
   color: var(--main-text);
   white-space: nowrap;
@@ -101,7 +108,7 @@ export const TrackPlayLikesDisplay = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
-  margin-left: 26%;
+  margin-left: 30%;
 `;
 
 const BtnIconMixin = `css
@@ -120,6 +127,9 @@ export const TrackPlayLike = styled.div`
   padding: 5px;
   cursor: pointer;
   ${BtnIconMixin}
+  @media screen and (max-width: 508px) {
+    display: none;
+  }
 `;
 
 export const TrackPlayDislike = styled(TrackPlayLike)`

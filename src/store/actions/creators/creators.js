@@ -7,6 +7,7 @@ import {
   FAVORITE_TRACKS,
   SEARCH,
   FILTERS,
+  SET_LIKE_STATE,
 } from '../types/types';
 
 export const setAllTracks = (tracks) => ({
@@ -59,12 +60,17 @@ export const setSearchTerm = (letters) => ({
   },
 });
 
-export const setFilter = (filterType, filterValues) => {
-  return {
-    type: FILTERS,
-    payload: {
-      filterType,
-      filterValues,
-    },
-  };
-};
+export const setFilter = (filterType, filterValues) => ({
+  type: FILTERS,
+  payload: {
+    filterType,
+    filterValues,
+  },
+});
+
+export const setLikeState = (isLiked) => ({
+  type: SET_LIKE_STATE,
+  payload: {
+    isLiked,
+  },
+});

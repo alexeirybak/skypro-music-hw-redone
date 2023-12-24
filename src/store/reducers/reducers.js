@@ -7,6 +7,7 @@ import {
   FAVORITE_TRACKS,
   SEARCH,
   FILTERS,
+  SET_LIKE_STATE,
 } from '../actions/types/types.js';
 
 const initialState = {
@@ -19,7 +20,7 @@ const initialState = {
   filters: '',
   filterByAuthors: [],
   filterByGenres: [],
-  numberTracks: null,
+  isLiked: null,
 };
 
 export default function trackReducer(state = initialState, action) {
@@ -91,6 +92,14 @@ export default function trackReducer(state = initialState, action) {
       };
     }
 
+    case SET_LIKE_STATE: {
+      const { isLiked } = action.payload;
+      return {
+        ...state,
+        isLiked: isLiked,
+      };
+    }
+    
     default:
       return state;
   }

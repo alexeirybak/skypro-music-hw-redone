@@ -7,7 +7,7 @@ export const ErrorBlock = styled.div`
 `;
 
 export const ErrorMessage = styled.p`
-  font-size: 24px;
+  font-size: 1.5rem;
   color: #ad61ff;
 `;
 

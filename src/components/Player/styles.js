@@ -5,8 +5,6 @@ export const Bar = styled.div`
   bottom: 0;
   left: 0;
   width: 100%;
-  background-color: var(--player-bg);
-  transition: background-color 0.5s ease;
 `;
 
 export const BarContent = styled.div`
@@ -20,6 +18,13 @@ export const BarPlayerBlock = styled.div`
   flex-direction: row;
   justify-content: space-between;
   background-color: var(--container);
+  transition: background-color 0.5s ease;
+  @media screen and (max-width: 471px) {
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: center;
+    padding: 10px 0;
+  }
 `;
 
 export const Equalizer = styled.img`
@@ -27,6 +32,9 @@ export const Equalizer = styled.img`
   padding-bottom: 10px;
   width: 100px;
   display: block;
+  @media screen and (max-width: 897px) {
+    display: none;
+  }
 `;
 
 export const EqualizerPlace = styled.div`

@@ -6,12 +6,17 @@ export const CenterBlockFilter = styled.div`
   align-items: flex-start;
   margin-bottom: 51px;
   column-gap: 10px;
+  @media screen and (max-width: 471px) {
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 10px;
+  }
 `;
 
 export const FilterTitle = styled.div`
   font-style: normal;
   font-weight: 400;
-  font-size: 16px;
+  font-size: 1rem;
   line-height: 24px;
   margin-right: 15px;
 `;
@@ -29,7 +34,7 @@ export const FilterButton = styled.button`
   color: var(--main-text);
   font-style: normal;
   font-weight: 400;
-  font-size: 16px;
+  font-size: 1rem;
   line-height: 24px;
   border: 1px solid var(--main-text);
   border-radius: 60px;
@@ -52,6 +57,12 @@ export const FilterButton = styled.button`
       color 0.3s ease,
       border-color 0.3s ease;
   }
+  @media screen and (max-width: 579px) {
+    width: 120px;
+  }
+  @media screen and (max-width: 508px) {
+    width: 109px;
+  }
 `;
 
 export const BtnTextActive = styled(FilterButton)`
@@ -65,7 +76,7 @@ export const BtnTextActive = styled(FilterButton)`
 export const FilterCounter = styled.div`
   width: 30px;
   height: 30px;
-  color: #fff;
+  color: var(--container);
   background-color: #ad61ff;
   border-radius: 50%;
   display: flex;
@@ -79,6 +90,10 @@ export const FilterCounter = styled.div`
 export const FilterBlock = styled.div`
   padding-top: 32px;
   padding-bottom: 32px;
+  @media screen and (max-width: 475px) {
+    padding-top: 22px;
+    padding-bottom: 22px;
+  }
 `;
 
 const FilterContentMixin = css`
@@ -91,26 +106,39 @@ const FilterContentMixin = css`
   border-radius: 12px;
   padding: 0;
   cursor: pointer;
-  transition: 1s ease max-height;
+  transition: 0.5s ease max-height;
   background: var(--title-track-img);
   z-index: 1;
   width: 248px;
+  @media screen and (max-width: 471px) {
+    left: -50%;
+  }
 `;
 
 export const FilterContent = styled.div`
-  max-height: ${({ $isAuthorMenuOpen }) =>
-    $isAuthorMenuOpen ? '305px' : '0'};
+  max-height: ${({ $isAuthorMenuOpen }) => ($isAuthorMenuOpen ? '305px' : '0')};
   ${FilterContentMixin};
+  @media screen and (max-width: 471px) {
+    left: -50%;
+  }
 `;
 
 export const FilterContentYear = styled.div`
   max-height: ${({ $isYearMenuOpen }) => ($isYearMenuOpen ? '305px' : '0')};
   ${FilterContentMixin};
+  @media screen and (max-width: 471px) {
+    left: -50%;
+    max-height: ${({ $isYearMenuOpen }) => ($isYearMenuOpen ? '120px' : '0')};
+  }
 `;
 
 export const FilterContentGenre = styled.div`
   max-height: ${({ $isGenreMenuOpen }) => ($isGenreMenuOpen ? '305px' : '0')};
   ${FilterContentMixin};
+  @media screen and (max-width: 471px) {
+    left: -50%;
+    max-height: ${({ $isGenreMenuOpen }) => ($isGenreMenuOpen ? '120px' : '0')};
+  }
 `;
 
 const FilterListMixin = css`
@@ -119,7 +147,7 @@ const FilterListMixin = css`
   flex-direction: column;
   align-items: flex-start;
   row-gap: 28px;
-  font-size: 20px;
+  font-size: 1.25rem;
   font-weight: 400;
   line-height: 24px;
   overflow-x: hidden;
@@ -143,6 +171,18 @@ const FilterListMixin = css`
     background-color: var(--scroll-thumb);
     border-radius: 2px;
     border: 2px solid var(--scroll-thumb);
+  }
+  @media screen and (max-width: 498px) {
+    height: 150px;
+    display: inline-flex;
+    flex-direction: column;
+    align-items: flex-start;
+    row-gap: 12px;
+    font-size: 1.25rem;
+    font-weight: 400;
+    line-height: 14px;
+    overflow-x: hidden;
+    scrollbar-color: var(--scroll-thumb) var(--scrollbar);
   }
 `;
 

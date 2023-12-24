@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { PlayList } from '../PlayList';
 import { Filter } from '../Filter';
 import { Search } from '../Search';
-import { ContentTitle } from '../../pages/favorites/styles';
+import { ContentTitle } from '../../components/ContentTitle';
 import { ErrorBlock } from '../ErrorBlock';
 import * as S from './styles';
 
@@ -26,7 +26,7 @@ export const SidebarCenterBlock = ({
         dataFilter={dataFilter}
         numberTracks={numberTracks}
       />
-      <S.CenterBlockContent>
+      <S.CenterBlockContent $isPlaying={isPlaying}>
         <ContentTitle />
         {error ? (
           <ErrorBlock error={error} />

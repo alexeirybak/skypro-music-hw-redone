@@ -8,6 +8,10 @@ export const CenterBlockSearch = styled.div`
   flex-direction: row;
   align-items: center;
   column-gap: 10px;
+  @media screen and (max-width: 768px) {
+    padding-bottom: 20px;
+  }
+
 `;
 
 export const Glass = styled.div`
@@ -28,7 +32,7 @@ export const SearchText = styled.input`
   padding: 13px 10px 14px;
   font-style: normal;
   font-weight: 400;
-  font-size: 16px;
+  font-size: 1rem;
   line-height: 24px;
   color: var(--main-text);
   &::placeholder {
@@ -36,7 +40,11 @@ export const SearchText = styled.input`
     color: var(--main-text);
     font-style: normal;
     font-weight: 400;
-    font-size: 16px;
+    font-size: 1rem;
     line-height: 24px;
   }
+  @media screen and (max-width: 768px) {
+    padding: 5px 5px 5px;
+  }
+
 `;
