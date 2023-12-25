@@ -1,57 +1,52 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useContext } from 'react';
 import { UserContext } from '../../contexts/UserContext';
 import {
-  setAllTracks,
   activeTrack,
+  setAllTracks,
   setSearchTerm,
+  setFilter,
   setLikeState,
   setLoading,
   setPlaying
 } from '../../store/actions/creators/creators';
-import { addLike, disLike, getCategory } from '../../api/apiGetTracks';
-import { ContentTitle } from '../../components/ContentTitle';
-import { ErrorBlock } from '../../components/ErrorBlock';
+import { addLike, disLike } from '../../api/apiGetTracks';
+import { getAllTracks } from '../../api/apiGetTracks';
 import { refreshToken } from '../../api/authApi';
+import { Filter } from '../../components/Filter';
+import { ContentTitle } from '../../components/ContentTitle';
 import { durationFormatter } from '../../utils/durationFormatter';
 import { tracks } from '../../constants';
 import { TrackTitleSvg } from '../../utils/iconSVG/trackTitle';
 import { TrackLikesMainSvg } from '../../utils/iconSVG/trackLikeMain';
-import { useParams } from 'react-router-dom';
-import { musicCategory } from '../../constants';
-import * as S from '../../pages/PlayList/styles';
+import { ErrorBlock } from '../../components/ErrorBlock';
+import * as S from './styles';
 
-export function Category() {
-  const params = useParams();
-  const category = musicCategory.find(
-    (category) => category.id === Number(params.id),
-  );
-  const tokenRefresh = JSON.parse(localStorage.getItem('tokenRefresh'));
-  let tokenAccess = JSON.parse(localStorage.getItem('tokenAccess'));
+export const PlayList = () => {
+
   const [error, setError] = useState(null);
-  const { user } = useContext(UserContext);
-  const [disabled, setDisabled] = useState(false);
-
-  const dispatch = useDispatch();
-  const symbols = useSelector((state) => state.tracks.letters);
+  const [dataFilter, setDataFilter] = useState('По умолчанию');
+  const [numberTracks, setNumberTracks] = useState(null);
   const isLoading = useSelector((state) => state.tracks.isLoading);
   const isPlaying = useSelector((state) => state.tracks.isPlaying);
+  const tokenRefresh = JSON.parse(localStorage.getItem('tokenRefresh'));
+  const tokenAccess = JSON.parse(localStorage.getItem('tokenAccess'));
+  const { user } = useContext(UserContext);
+  const [disabled, setDisabled] = useState(false);
   const currentTrack = useSelector((state) => state.tracks.currentTrack);
   let music = useSelector((state) => state.tracks.allTracks);
 
+  const dispatch = useDispatch();
+
   useEffect(() => {
     dispatch(setSearchTerm(null));
+    dispatch(setFilter(null));
   }, []);
 
   const fetchTracks = async () => {
     try {
-      const response = await getCategory({ id: params.id });
-      const newArray = response.items.map((item) => {
-        const { stared_user, ...rest } = item;
-        return { ...rest, stared_user: stared_user };
-      });
-      dispatch(setAllTracks(newArray));
+      const tracks = await getAllTracks();
+      dispatch(setAllTracks(tracks));
       dispatch(setLoading(false));
       setError(false);
     } catch (error) {
@@ -62,18 +57,13 @@ export function Category() {
     }
   };
 
-  useEffect(() => {
+  useEffect(() => { 
     fetchTracks();
-  }, [params.id]);
+  }, []);
 
   if (isLoading) {
     music = [...Array(12)].flatMap(() => tracks);
   }
-
-  const handleTrackClick = (item) => {
-    dispatch(activeTrack(item));
-    setPlaying(true);
-  };
 
   const toggleLike = async (item) => {
     try {
@@ -85,11 +75,12 @@ export function Category() {
         await addLike({ token: tokenAccess, id: item.id });
         dispatch(setLikeState(true));
       }
+      const response = await getAllTracks();
+      dispatch(setAllTracks(response));
     } catch (error) {
       if (error.message === 'Токен протух') {
         const newAccess = await refreshToken(tokenRefresh);
         localStorage.setItem('tokenAccess', JSON.stringify(newAccess));
-        tokenAccess = newAccess.access;
         if (item.stared_user.find((el) => el.id === user.id)) {
           await disLike({ token: newAccess.access, id: item.id });
           dispatch(setLikeState(false));
@@ -97,24 +88,78 @@ export function Category() {
           await addLike({ token: newAccess.access, id: item.id });
           dispatch(setLikeState(true));
         }
+        const response = await getAllTracks();
+        dispatch(setAllTracks(response));
         return;
       }
     } finally {
       setDisabled(false);
-      fetchTracks();
     }
   };
 
-  let filteredMusic = music;
+  const handleTrackClick = (item) => {
+    dispatch(activeTrack(item));
+    dispatch(setPlaying(true));
+  };
+
+  let filteredMusic = [...music];
+  const symbols = useSelector((state) => state.tracks.letters);
+  const filtersType = useSelector((state) => state.tracks.filterType);
+  const filtersValues = useSelector((state) => state.tracks.filterValues);
 
   if (symbols) {
-    filteredMusic = music.filter(
-      (item) =>
+    filteredMusic = filteredMusic.filter((item) => {
+      return (
         item.name.toLowerCase().includes(symbols.toLowerCase()) ||
         item.author.toLowerCase().includes(symbols.toLowerCase()) ||
-        item.album.toLowerCase().includes(symbols.toLowerCase()),
+        item.album.toLowerCase().includes(symbols.toLowerCase())
+      );
+    });
+  }
+
+  if (filtersType && filtersValues.length > 0) {
+    filteredMusic = filteredMusic.filter((track) => {
+      if (filtersType === 'authors') {
+        return filtersValues.includes(track.author);
+      } else if (filtersType === 'genres') {
+        return filtersValues.includes(track.genre);
+      }
+      return true;
+    });
+  }
+
+  if (dataFilter === 'Сначала старые') {
+    filteredMusic = filteredMusic.sort(
+      (a, b) => new Date(a.release_date) - new Date(b.release_date),
+    );
+  } else if (dataFilter === 'Сначала новые') {
+    filteredMusic = filteredMusic.sort(
+      (a, b) => new Date(b.release_date) - new Date(a.release_date),
     );
   }
+
+  useEffect(() => {
+    if (setNumberTracks) {
+      if (filteredMusic.length > 99) {
+        setNumberTracks('99+');
+      } else {
+        setNumberTracks(filteredMusic.length);
+      }
+    }
+  }, [filteredMusic, setNumberTracks]);
+
+  useEffect(() => {
+    const isStared =
+      currentTrack &&
+      currentTrack.stared_user &&
+      Array.isArray(currentTrack.stared_user) &&
+      currentTrack.stared_user.some((staredUser) => staredUser.id === user.id);
+    if (isStared) {
+      dispatch(setLikeState(true));
+    } else {
+      dispatch(setLikeState(false));
+    }
+  }, [currentTrack, user]);
 
   const fullPlayList = filteredMusic.map((item, i) => {
     const { name, author, album, duration_in_seconds } = item;
@@ -131,6 +176,7 @@ export function Category() {
               {!isLoading ? (
                 <TrackTitleSvg
                   isCurrentPlaying={isCurrentPlaying}
+                  isPlaying={isPlaying}
                 />
               ) : (
                 <S.SkeletonIcon></S.SkeletonIcon>
@@ -139,7 +185,10 @@ export function Category() {
 
             <S.TrackTitleBlock onClick={() => handleTrackClick(item)}>
               {!isLoading ? (
-                <S.TrackTitleLink>{name}</S.TrackTitleLink>
+                <S.TrackTitleNameAuthorLink>
+                  <S.TrackTitleLink>{name}</S.TrackTitleLink>
+                  <S.TrackAuthorLinkMobile>{author}</S.TrackAuthorLinkMobile>
+                </S.TrackTitleNameAuthorLink>
               ) : (
                 <S.SkeletonTrackTitle></S.SkeletonTrackTitle>
               )}
@@ -161,7 +210,8 @@ export function Category() {
             )}
           </S.TrackAlbum>
           <S.TrackTimeComponent>
-            <S.LikeButton disabled={disabled} onClick={() => toggleLike(item)}>
+            <S.LikeButton disabled={disabled} 
+              onClick={() => toggleLike(item)}>
               <TrackLikesMainSvg isLiked={isLiked} />
             </S.LikeButton>
             <S.TrackTimeText>
@@ -174,16 +224,24 @@ export function Category() {
   });
 
   return (
-      <>
-        <S.CenterBlockH2>{category.alt}</S.CenterBlockH2>
-        <S.CenterBlockContent $isPlaying={isPlaying}>
-          <ContentTitle />
-          {error ? (
-            <ErrorBlock error={error} />
-          ) : (
+    <>
+      {error ? (
+        <ErrorBlock error={error} />
+      ) : (
+        <>
+          <S.CenterBlockH2>Треки</S.CenterBlockH2>
+          <Filter 
+            error={error}
+            setDataFilter={setDataFilter}
+            dataFilter={dataFilter}
+            numberTracks={numberTracks}
+          />
+          <S.CenterBlockContent $isPlaying={isPlaying}>
+            <ContentTitle />
             <S.ContentPlayList>{fullPlayList}</S.ContentPlayList>
-          )}
-        </S.CenterBlockContent>
-      </>
+          </S.CenterBlockContent>
+        </>
+      )}
+    </>
   );
-}
+};

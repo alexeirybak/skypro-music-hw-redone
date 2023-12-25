@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { NavLink } from 'react-router-dom';
+import { NavLink, Outlet } from 'react-router-dom';
 import { useContext} from 'react';
 import { UserContext } from '../../contexts/UserContext';
 import { SwitchTheme } from '../SwitchTheme';
@@ -30,9 +30,8 @@ export const Nav = () => {
         <S.BurgerLine></S.BurgerLine>
         <S.BurgerLine></S.BurgerLine>
         <S.BurgerLine></S.BurgerLine>
-      </S.NavBurger>
 
-      <S.MenuContent $menuVisible={menuVisible}>
+        <S.MenuContent $menuVisible={menuVisible}>
         <S.MenuList>
           <S.MenuItem>
             <S.MenuLink to='/'>
@@ -40,7 +39,7 @@ export const Nav = () => {
             </S.MenuLink>
           </S.MenuItem>
           <S.MenuItem>
-            <S.MenuLink to='/favourites'>
+            <S.MenuLink to='/favorites'>
               Мой плейлист
             </S.MenuLink>
           </S.MenuItem>
@@ -54,6 +53,8 @@ export const Nav = () => {
           </S.MenuItem>
         </S.MenuList>
       </S.MenuContent>
+      </S.NavBurger>
+      
       <SwitchTheme />
     </S.MainNav>
   );

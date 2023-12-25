@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import { durationFormatter } from '../../utils/durationFormatter';
 import * as S from './styles';
 
-export const ProgressBar = ({ currentTime, duration, onSeek, isPlaying }) => {
+export const ProgressBar = ({ currentTime, duration, onSeek}) => {
   const [progressPercentage, setProgressPercentage] = useState(0);
   const progressBarRef = useRef(null);
 
@@ -32,7 +32,6 @@ export const ProgressBar = ({ currentTime, duration, onSeek, isPlaying }) => {
       </S.Timer>
       <S.ProgressBarWrapper
         onClick={handleClick}
-        $playing={isPlaying}
         ref={progressBarRef}
       >
         <S.ProgressBar style={{ width: `${progressPercentage}%` }} />

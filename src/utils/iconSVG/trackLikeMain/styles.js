@@ -1,10 +1,10 @@
 import styled from 'styled-components';
 
-export const TrackTimeImg = styled.svg`
+export const TrackLikesMainImg = styled.svg`
   width: 14px;
   height: 12px;
   margin-right: 17px;
-  fill: transparent;
+  fill: ${(props) => (props.$isLiked ? '#b672ff' : 'transparent')};
   path {
     stroke: var(--play-list-title);
   }

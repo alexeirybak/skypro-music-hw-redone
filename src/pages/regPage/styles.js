@@ -1,4 +1,4 @@
-import { styled } from "styled-components";
+import { styled } from 'styled-components';
 
 export const PageContainer = styled.div`
   max-width: 100%;
@@ -9,7 +9,6 @@ export const PageContainer = styled.div`
 export const ModalForm = styled.div`
   --modal-width: 366px;
   --modal-height: 439px;
-
   position: absolute;
   left: calc(50% - (var(--modal-width) / 2));
   top: calc(50% - (var(--modal-height) / 2));
@@ -19,6 +18,10 @@ export const ModalForm = styled.div`
   background-color: #ffffff;
   border-radius: 12px;
   padding: 43px 47px 47px 40px;
+  @media screen and (max-width: 471px) {
+    padding: 25px;
+    --modal-width: 240px;
+  }
 `;
 export const ModalLogo = styled.div`
   display: flex;
@@ -38,40 +41,42 @@ export const ModalInput = styled.input`
   border: none;
   border-bottom: 1px solid #d0cece;
   padding: 8px 1px;
-  font-size: 16px;
+  font-size: 1rem;
   padding-left: 10px;
 
   &::placeholder {
     font-style: normal;
     font-weight: 400;
-    font-size: 18px;
+    font-size: 1.125rem;
     line-height: 24px;
     color: #d0cece;
   }
 `;
 
 const Button = styled.button`
+  cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
   text-decoration: none;
-
   width: 278px;
   height: 52px;
   border-radius: 6px;
   border: none;
   font-style: normal;
   font-weight: 400;
-  font-size: 18px;
+  font-size: 1.125rem;
   line-height: 24px;
-
   &:disabled {
     background-color: #303030;
+  }
+  @media screen and (max-width: 471px) {
+    width: 180px;
   }
 `;
 
 export const PrimaryButton = styled(Button)`
-  color: #ffffff;
+  color: #fff;
   background-color: #580ea2;
   &:hover {
     background-color: #3f007d;
@@ -101,6 +106,7 @@ export const Buttons = styled.div`
   gap: 20px;
   margin-top: 60px;
   width: 100%;
+  align-items: center;
 `;
 
 export const Inputs = styled.div`
@@ -113,7 +119,7 @@ export const Inputs = styled.div`
 export const Error = styled.div`
   color: red;
   font-weight: 400;
-  font-size: 18px;
+  font-size: 1.125rem;
   line-height: 24px;
   margin-top: 20px;
   text-align: center;

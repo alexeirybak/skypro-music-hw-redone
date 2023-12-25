@@ -3,18 +3,48 @@ import {
   NEXT_TRACK,
   PREV_TRACK,
   TOGGLE_SHUFFLED,
+  ALL_TRACKS,
+  FAVORITE_TRACKS,
+  SEARCH,
+  FILTERS,
+  SET_LIKE_STATE,
+  SET_LOADING,
+  SET_PLAYING
 } from '../actions/types/types.js';
 
 const initialState = {
   track: null,
   shuffled: false,
   shuffledPlaylist: [],
-  playing: true,
+  allTracks: [],
+  favoriteTracks: [],
+  letters: '',
+  filters: '',
+  filterByAuthors: [],
+  filterByGenres: [],
+  isLiked: null,
+  isLoading: true,
+  isPlaying: false
 };
 
 export default function trackReducer(state = initialState, action) {
   switch (action.type) {
-    
+    case ALL_TRACKS: {
+      const { tracks } = action.payload;
+      return {
+        ...state,
+        allTracks: tracks,
+      };
+    }
+
+    case FAVORITE_TRACKS: {
+      const { tracks } = action.payload;
+      return {
+        ...state,
+        favoriteTracks: tracks,
+      };
+    }
+
     case SET_CURRENT_TRACK: {
       const { track } = action.payload;
       return {
@@ -48,6 +78,47 @@ export default function trackReducer(state = initialState, action) {
       };
     }
 
+    case SEARCH: {
+      const { letters } = action.payload;
+      return {
+        ...state,
+        letters,
+      };
+    }
+
+    case FILTERS: {
+      const { filterType, filterValues } = action.payload;
+      return {
+        ...state,
+        filterType,
+        filterValues,
+      };
+    }
+
+    case SET_LIKE_STATE: {
+      const { isLiked } = action.payload;
+      return {
+        ...state,
+        isLiked,
+      };
+    }
+
+    case SET_LOADING: {
+      const { isLoading } = action.payload;
+      return {
+        ...state,
+        isLoading,
+      };
+    }
+
+    case SET_PLAYING: {
+      const { isPlaying } = action.payload;
+      return {
+        ...state,
+        isPlaying,
+      };
+    }
+    
     default:
       return state;
   }

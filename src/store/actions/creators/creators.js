@@ -3,9 +3,30 @@ import {
   NEXT_TRACK,
   PREV_TRACK,
   TOGGLE_SHUFFLED,
+  ALL_TRACKS,
+  FAVORITE_TRACKS,
+  SEARCH,
+  FILTERS,
+  SET_LIKE_STATE,
+  SET_LOADING,
+  SET_PLAYING
 } from '../types/types';
 
-export const activeTrackSelector = (track) => ({
+export const setAllTracks = (tracks) => ({
+  type: ALL_TRACKS,
+  payload: {
+    tracks,
+  },
+});
+
+export const setFavoriteTracks = (tracks) => ({
+  type: FAVORITE_TRACKS,
+  payload: {
+    tracks,
+  },
+});
+
+export const activeTrack = (track) => ({
   type: SET_CURRENT_TRACK,
   payload: {
     track,
@@ -31,5 +52,41 @@ export const toggleShuffled = (shuffledPlaylist, shuffled) => ({
   payload: {
     shuffledPlaylist,
     shuffled,
+  },
+});
+
+export const setSearchTerm = (letters) => ({
+  type: SEARCH,
+  payload: {
+    letters,
+  },
+});
+
+export const setFilter = (filterType, filterValues) => ({
+  type: FILTERS,
+  payload: {
+    filterType,
+    filterValues,
+  },
+});
+
+export const setLikeState = (isLiked) => ({
+  type: SET_LIKE_STATE,
+  payload: {
+    isLiked,
+  },
+});
+
+export const setLoading = (isLoading) => ({
+  type: SET_LOADING,
+  payload: {
+    isLoading,
+  },
+});
+
+export const setPlaying = (isPlaying) => ({
+  type: SET_PLAYING,
+  payload: {
+    isPlaying,
   },
 });

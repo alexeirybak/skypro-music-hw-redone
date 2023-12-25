@@ -1,18 +1,25 @@
 import styled, { keyframes } from 'styled-components';
 
 export const SidebarBlock = styled.div`
-  height: 100%;
-  padding: 240px 0 0;
+  padding: 20px 0;
   display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
+  flex-direction: row;
+  justify-content: center;
+  margin-bottom: 50px;
+  @media screen and (max-width: 491px) {
+    margin-bottom: 100px;
+  }
 `;
 
 export const SidebarList = styled.div`
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: center;
-  row-gap: 30px;
+  column-gap: 30px;
+  @media screen and (max-width: 897px) {
+    flex-direction: column;
+    row-gap: 20px;
+  }
 `;
 
 export const SidebarItem = styled.div`
@@ -21,13 +28,13 @@ export const SidebarItem = styled.div`
 `;
 
 export const SidebarLink = styled.a`
-  width: 100%;
   height: 100%;
 `;
 
 export const SidebarImg = styled.img`
   width: 100%;
   height: auto;
+  border-radius: 10px;
 `;
 
 const blink = keyframes`

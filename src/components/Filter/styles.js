@@ -6,12 +6,17 @@ export const CenterBlockFilter = styled.div`
   align-items: flex-start;
   margin-bottom: 51px;
   column-gap: 10px;
+  @media screen and (max-width: 471px) {
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 10px;
+  }
 `;
 
 export const FilterTitle = styled.div`
   font-style: normal;
   font-weight: 400;
-  font-size: 16px;
+  font-size: 1rem;
   line-height: 24px;
   margin-right: 15px;
 `;
@@ -20,6 +25,7 @@ export const FilterList = styled.div`
   display: flex;
   flex-direction: column;
   position: relative;
+  margin-bottom: 12px;
 `;
 
 export const FilterButton = styled.button`
@@ -28,7 +34,7 @@ export const FilterButton = styled.button`
   color: var(--main-text);
   font-style: normal;
   font-weight: 400;
-  font-size: 16px;
+  font-size: 1rem;
   line-height: 24px;
   border: 1px solid var(--main-text);
   border-radius: 60px;
@@ -51,6 +57,12 @@ export const FilterButton = styled.button`
       color 0.3s ease,
       border-color 0.3s ease;
   }
+  @media screen and (max-width: 579px) {
+    width: 120px;
+  }
+  @media screen and (max-width: 508px) {
+    width: 109px;
+  }
 `;
 
 export const BtnTextActive = styled(FilterButton)`
@@ -62,9 +74,9 @@ export const BtnTextActive = styled(FilterButton)`
 `;
 
 export const FilterCounter = styled.div`
-  width: 26px;
-  height: 26px;
-  color: #fff;
+  width: 30px;
+  height: 30px;
+  color: var(--container);
   background-color: #ad61ff;
   border-radius: 50%;
   display: flex;
@@ -78,53 +90,69 @@ export const FilterCounter = styled.div`
 export const FilterBlock = styled.div`
   padding-top: 32px;
   padding-bottom: 32px;
+  @media screen and (max-width: 475px) {
+    padding-top: 22px;
+    padding-bottom: 22px;
+  }
 `;
 
 const FilterContentMixin = css`
   position: absolute;
-  top: 50px;
+  top: 38px;
+  margin-top: 12px;
   overflow: hidden;
   display: flex;
   justify-content: center;
   border-radius: 12px;
   padding: 0;
   cursor: pointer;
-  transition: 1s ease max-height;
+  transition: 0.5s ease max-height;
   background: var(--title-track-img);
   z-index: 1;
+  width: 248px;
+  @media screen and (max-width: 471px) {
+    left: -50%;
+  }
 `;
 
 export const FilterContent = styled.div`
-  width: 248px;
   max-height: ${({ $isAuthorMenuOpen }) => ($isAuthorMenuOpen ? '305px' : '0')};
   ${FilterContentMixin};
+  @media screen and (max-width: 471px) {
+    left: -50%;
+  }
 `;
 
 export const FilterContentYear = styled.div`
-  width: 144px;
   max-height: ${({ $isYearMenuOpen }) => ($isYearMenuOpen ? '305px' : '0')};
   ${FilterContentMixin};
+  @media screen and (max-width: 471px) {
+    left: -50%;
+    max-height: ${({ $isYearMenuOpen }) => ($isYearMenuOpen ? '120px' : '0')};
+  }
 `;
 
 export const FilterContentGenre = styled.div`
   max-height: ${({ $isGenreMenuOpen }) => ($isGenreMenuOpen ? '305px' : '0')};
-  width: 248px;
   ${FilterContentMixin};
+  @media screen and (max-width: 471px) {
+    left: -50%;
+    max-height: ${({ $isGenreMenuOpen }) => ($isGenreMenuOpen ? '120px' : '0')};
+  }
 `;
 
 const FilterListMixin = css`
+  height: 150px;
   display: inline-flex;
   flex-direction: column;
   align-items: flex-start;
   row-gap: 28px;
-  font-variant-numeric: lining-nums proportional-nums;
-  font-size: 20px;
+  font-size: 1.25rem;
   font-weight: 400;
   line-height: 24px;
   overflow-x: hidden;
   scrollbar-color: var(--scroll-thumb) var(--scrollbar);
   a {
-    color: var(--main-text);
     transition: color 0.3s ease;
   }
   a:active,
@@ -144,21 +172,28 @@ const FilterListMixin = css`
     border-radius: 2px;
     border: 2px solid var(--scroll-thumb);
   }
+  @media screen and (max-width: 498px) {
+    height: 150px;
+    display: inline-flex;
+    flex-direction: column;
+    align-items: flex-start;
+    row-gap: 12px;
+    font-size: 1.25rem;
+    font-weight: 400;
+    line-height: 14px;
+    overflow-x: hidden;
+    scrollbar-color: var(--scroll-thumb) var(--scrollbar);
+  }
 `;
 
 export const FilterListMenu = styled.ul`
   ${FilterListMixin};
   width: 180px;
-  height: 237px;
 `;
 
 export const FilterListMenuItem = styled.li``;
 
-export const FilterListMenuLink = styled.a``;
-
-export const FilterListMenuYear = styled.ul`
-  ${FilterListMixin};
-  width: 116px;
-  height: 237px;
-  align-items: center;
+export const FilterListMenuLink = styled.a`
+  color: ${(props) => (props.$active ? '#b672ff' : 'var(--main-text)')};
+  text-decoration: ${(props) => (props.$active ? 'underline' : 'none')};
 `;
