@@ -27,6 +27,14 @@ export const PlayList = () => {
   const [error, setError] = useState(null);
   const [dataFilter, setDataFilter] = useState('По умолчанию');
   const [numberTracks, setNumberTracks] = useState(null);
+  const isLoading = useSelector((state) => state.tracks.isLoading);
+  const isPlaying = useSelector((state) => state.tracks.isPlaying);
+  const tokenRefresh = JSON.parse(localStorage.getItem('tokenRefresh'));
+  const tokenAccess = JSON.parse(localStorage.getItem('tokenAccess'));
+  const { user } = useContext(UserContext);
+  const [disabled, setDisabled] = useState(false);
+  const currentTrack = useSelector((state) => state.tracks.currentTrack);
+  let music = useSelector((state) => state.tracks.allTracks);
 
   const dispatch = useDispatch();
 
@@ -49,19 +57,9 @@ export const PlayList = () => {
     }
   };
 
-  const isLoading = useSelector((state) => state.tracks.isLoading);
-  const isPlaying = useSelector((state) => state.tracks.isPlaying);
-
   useEffect(() => { 
     fetchTracks();
   }, []);
-
-  const tokenRefresh = JSON.parse(localStorage.getItem('tokenRefresh'));
-  const tokenAccess = JSON.parse(localStorage.getItem('tokenAccess'));
-  const { user } = useContext(UserContext);
-  const [disabled, setDisabled] = useState(false);
-  const currentTrack = useSelector((state) => state.tracks.currentTrack);
-  let music = useSelector((state) => state.tracks.allTracks);
 
   if (isLoading) {
     music = [...Array(12)].flatMap(() => tracks);
@@ -238,7 +236,7 @@ export const PlayList = () => {
             dataFilter={dataFilter}
             numberTracks={numberTracks}
           />
-          <S.CenterBlockContent>
+          <S.CenterBlockContent $isPlaying={isPlaying}>
             <ContentTitle />
             <S.ContentPlayList>{fullPlayList}</S.ContentPlayList>
           </S.CenterBlockContent>

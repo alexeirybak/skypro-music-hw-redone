@@ -25,6 +25,7 @@ export const PlayerTrackPlay = () => {
   const [isLiked, setIsLiked] = useState(null);
 
   const isLikedTracks = useSelector((state) => state.tracks.isLiked);
+  console.log(isLikedTracks)
   useEffect(() => {
     if (isLikedTracks) {
       setIsLiked(true);

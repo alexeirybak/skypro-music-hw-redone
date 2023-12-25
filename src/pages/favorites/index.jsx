@@ -6,7 +6,8 @@ import {
   setFavoriteTracks,
   setSearchTerm,
   setLoading, 
-  setPlaying
+  setPlaying,
+  setLikeState
 } from '../../store/actions/creators/creators';
 import { getFavoriteTracks, disLike } from '../../api/apiGetTracks';
 import { ContentTitle } from '../../components/ContentTitle';
@@ -42,14 +43,17 @@ export const Favorites = () => {
       dispatch(setFavoriteTracks(favoriteTracks));
       dispatch(setAllTracks(favoriteTracks));
       dispatch(setLoading(false));
+      dispatch(setLikeState(true));
     } catch (error) {
-      if (error.message === 'Токен протух') { 
-      const newAccess = await refreshToken(tokenRefresh);
-      localStorage.setItem('tokenAccess', JSON.stringify(newAccess));
-      const favoriteTracks = await getFavoriteTracks(newAccess.access);
-      dispatch(setFavoriteTracks(favoriteTracks));
-      dispatch(setLoading(true));
-      setError(error.message);}
+      if (error.message === 'Токен протух') {
+        const newAccess = await refreshToken(tokenRefresh);
+        localStorage.setItem('tokenAccess', JSON.stringify(newAccess));
+        tokenAccess = newAccess;
+        const favoriteTracks = await getFavoriteTracks({ token: newAccess.access });
+        dispatch(setFavoriteTracks(favoriteTracks));
+        dispatch(setLoading(true));
+        setError(error.message);
+      }
     } finally {
       dispatch(setLoading(false));
     }
