@@ -5,4 +5,4 @@ export const IconSearchImg = styled.svg`
     stroke: var(--main-text);
     position: relative;
   }
-  `;
+`;

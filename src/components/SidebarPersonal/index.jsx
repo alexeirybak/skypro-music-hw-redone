@@ -1,4 +1,4 @@
-import { useContext} from 'react';
+import { useContext } from 'react';
 import { UserContext } from '../../contexts/UserContext';
 import { PersonIcon } from '../../utils/iconSVG/personIcon';
 import * as S from './styles';
@@ -13,7 +13,7 @@ export const SidebarPersonal = () => {
 
   return (
     <S.SidebarPersonal>
-      <S.SidebarPersonalName>{user}</S.SidebarPersonalName>
+      <S.SidebarPersonalName>{user.username}</S.SidebarPersonalName>
       <S.ButtonLogout onClick={handleLogout}>
         <PersonIcon />
       </S.ButtonLogout>

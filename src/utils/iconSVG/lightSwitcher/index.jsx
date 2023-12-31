@@ -1,7 +1,6 @@
 import * as S from './styles';
 
 export const LightSwitcherSvg = () => {
-
   return (
     <S.LightSwitcherImg
       xmlns='http://www.w3.org/2000/svg'

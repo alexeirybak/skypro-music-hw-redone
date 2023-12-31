@@ -1,8 +1,9 @@
 import * as S from './styles';
 
-export const TrackPlayLikeSvg = () => {
+export const TrackPlayLikeSvg = ({ isLiked }) => {
   return (
     <S.TrackPlayLikeImg
+      $isLiked={isLiked}
       xmlns='http://www.w3.org/2000/svg'
       width='16'
       height='14'

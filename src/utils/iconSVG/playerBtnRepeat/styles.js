@@ -4,7 +4,7 @@ export const PlayerBtnRepeatImg = styled.svg`
   width: 18px;
   height: 12px;
   path {
-    fill: ${props =>
+    fill: ${(props) =>
       props.$isLoop
         ? 'var(--player-btn-repeat-shuffle-active)'
         : 'var(--player-btn-repeat-shuffle)'};
@@ -16,4 +16,3 @@ export const PlayerBtnRepeatImg = styled.svg`
     fill: var(--main-text);
   }
 `;
-

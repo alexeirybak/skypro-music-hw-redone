@@ -1,4 +1,4 @@
-import styled, { css } from 'styled-components';
+import styled from 'styled-components';
 
 export const Timer = styled.div`
   display: flex;
@@ -7,6 +7,7 @@ export const Timer = styled.div`
   column-gap: 10px;
   padding-right: 15px;
   padding-bottom: 10px;
+  background: transparent;
 `;
 
 export const TimerData = styled.p``;

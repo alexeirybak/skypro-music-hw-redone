@@ -1,13 +1,13 @@
 import styled from 'styled-components';
 
 export const Block404 = styled.div`
-padding: 30px 20px;
-    display: flex;
-    flex-direction: column;
-    flex-wrap: nowrap;
-    align-items: center;
-    gap: 40px;
-    background-color: var(--container);
+  padding: 30px 20px;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: 40px;
+  background-color: var(--container);
 `;
 
 export const Img = styled.img`
@@ -15,7 +15,7 @@ export const Img = styled.img`
 `;
 
 export const Sign = styled.h1`
-  font-size: 22px;
+  font-size: 1.375rem;
   color: var(--main-content);
   text-align: center;
 `;

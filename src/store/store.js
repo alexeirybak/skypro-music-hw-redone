@@ -1,8 +1,14 @@
-import { configureStore } from '@reduxjs/toolkit';
-import trackReducer from './reducers/track';
+import { configureStore, combineReducers } from '@reduxjs/toolkit';
+import { tracksApi } from './tracksApi';
+import tracksReducer from './reducers/reducers';
+
+const rootReducer = combineReducers({
+  tracks: tracksReducer,
+  [tracksApi.reducerPath]: tracksApi.reducer,
+});
 
 export const store = configureStore({
-  reducer: {
-    audioplayer: trackReducer,
-  },
+  reducer: rootReducer,
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware().concat(tracksApi.middleware),
 });

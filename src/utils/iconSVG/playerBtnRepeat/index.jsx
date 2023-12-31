@@ -2,7 +2,8 @@ import * as S from './styles';
 
 export const PlayerBtnRepeatSvg = ({ isLoop }) => {
   return (
-    <S.PlayerBtnRepeatImg $isLoop={isLoop}
+    <S.PlayerBtnRepeatImg
+      $isLoop={isLoop}
       xmlns='http://www.w3.org/2000/svg'
       width='20'
       height='19'

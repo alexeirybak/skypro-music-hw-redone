@@ -1,11 +1,13 @@
+import { useGetAllTracksQuery } from '../../store/tracksApi';
 import { useState, useEffect } from 'react';
-import { getTrackById } from '../../api/apiGetTracks';
 import {
+  activeTrack,
   nextTrack,
   prevTrack,
   toggleShuffled,
-} from '../../store/actions/creators/track';
-import { useDispatch } from 'react-redux';
+  setPlaying,
+} from '../../store/actions/creators/creators';
+import { useDispatch, useSelector } from 'react-redux';
 import { PlayerBtnPrevSvg } from '../../utils/iconSVG/playerBtnPrev';
 import { PlayerBtnPlaySvg } from '../../utils/iconSVG/playerBtnPlay';
 import { PlayerBtnPauseSvg } from '../../utils/iconSVG/playerBtnPause';
@@ -15,17 +17,10 @@ import { PlayerBtnShuffleSvg } from '../../utils/iconSVG/playerBtnShuffle';
 import * as S from './styles';
 
 export const PlayerControls = ({
-  music,
-  currentTrack,
-  setCurrentTrack,
-  trackId,
-  isPlaying,
-  setIsPlaying,
   setCurrentTime,
   setDuration,
   audioRef,
   volume,
-  setPause,
 }) => {
   const [loaded, setLoaded] = useState(false);
   const [isLoop, setIsLoop] = useState(false);
@@ -35,6 +30,22 @@ export const PlayerControls = ({
   const [shuffledIndex, setShuffledIndex] = useState(0);
   const [shuffleTrackEnable, setShuffleTrackEnable] = useState(false);
   const [trackHistory, setTrackHistory] = useState([]);
+  const getTrack = useSelector(activeTrack);
+  const isPlaying = useSelector((state) => state.tracks.isPlaying);
+
+  const {
+    data: allTracks = { items: [] },
+    isLoading,
+    isError,
+  } = useGetAllTracksQuery();
+
+  useEffect(() => {
+    if (!isLoading && !isError) {
+    }
+  }, [isLoading, isError, allTracks]);
+  let music = allTracks;
+
+  const currentTrack = getTrack.payload.track.tracks.currentTrack;
 
   useEffect(() => {
     const newIndex = shuffleTrackEnable
@@ -57,7 +68,7 @@ export const PlayerControls = ({
   const handleStart = () => {
     if (loaded) {
       audioRef.current.play();
-      setIsPlaying(true);
+      dispatch(setPlaying(true));
     }
   };
 
@@ -68,26 +79,18 @@ export const PlayerControls = ({
   }, [loaded]);
 
   useEffect(() => {
-    async function fetchTrack() {
-      try {
-        const track = await getTrackById(trackId);
-        setCurrentTrack(track);
-      } catch (error) {
-        console.error(error);
-      }
-    }
-    fetchTrack();
-  }, [trackId]);
-
-  useEffect(() => {
     setLoaded(false);
   }, [currentTrack.track_file]);
 
   useEffect(() => {
     if (isPlaying) {
-      audioRef.current.play();
+      if (audioRef.current.readyState === 4) {
+        audioRef.current.play();
+      }
     } else {
-      audioRef.current.pause();
+      if (audioRef.current.readyState === 4) {
+        audioRef.current.pause();
+      }
     }
   }, [isPlaying, currentTrack.track_file, audioRef]);
 
@@ -127,7 +130,7 @@ export const PlayerControls = ({
     setTrackHistory((prevHistory) => [...prevHistory, currentTrack]);
 
     const nextMusic = music[nextIndex];
-    setCurrentTrack(nextMusic);
+    activeTrack(nextMusic);
 
     dispatch(nextTrack(nextMusic));
     setLoaded(false);
@@ -145,7 +148,7 @@ export const PlayerControls = ({
     if (trackHistory.length > 0) {
       const prevMusic = trackHistory.pop();
       setTrackHistory((prevHistory) => [...prevHistory]);
-      setCurrentTrack(prevMusic);
+      activeTrack(prevMusic);
       dispatch(prevTrack(prevMusic));
       setLoaded(false);
     } else {
@@ -166,7 +169,7 @@ export const PlayerControls = ({
       const prevMusic = shuffleTrackEnable
         ? shuffledTracks[prevIndex]
         : music[prevIndex];
-      setCurrentTrack(prevMusic);
+      activeTrack(prevMusic);
 
       dispatch(prevTrack(prevMusic));
       setLoaded(false);
@@ -214,8 +217,8 @@ export const PlayerControls = ({
       <audio
         ref={audioRef}
         src={currentTrack.track_file}
-        onPlay={() => setIsPlaying(true)}
-        onPause={() => setIsPlaying(false)}
+        onPlay={() => dispatch(setPlaying(true))}
+        onPause={() => dispatch(setPlaying(false))}
         loop={isLoop}
         onEnded={handleNextTrack}
         onLoadedMetadata={() => setDuration(audioRef.current.duration)}
@@ -229,8 +232,7 @@ export const PlayerControls = ({
         <S.PlayerBtnPlay
           onClick={() => {
             if (loaded) {
-              setIsPlaying(!isPlaying);
-              setPause(isPlaying);
+              dispatch(setPlaying(!isPlaying));
             }
           }}
         >
