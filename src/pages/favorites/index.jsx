@@ -1,3 +1,4 @@
+import { useGetFavoriteTracksQuery } from '../../store/tracksApi';
 import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
@@ -5,9 +6,9 @@ import {
   activeTrack,
   setFavoriteTracks,
   setSearchTerm,
-  setLoading, 
   setPlaying,
-  setLikeState
+  setLikeState,
+  setLoading,
 } from '../../store/actions/creators/creators';
 import { getFavoriteTracks, disLike } from '../../api/apiGetTracks';
 import { ContentTitle } from '../../components/ContentTitle';
@@ -22,10 +23,21 @@ import * as S from '../../pages/PlayList/styles';
 export const Favorites = () => {
   const tokenRefresh = JSON.parse(localStorage.getItem('tokenRefresh'));
   let tokenAccess = JSON.parse(localStorage.getItem('tokenAccess'));
-  const [disabled, setDisabled] = useState(false);
-  const [error, setError] = useState(null);
   const dispatch = useDispatch();
-  const isLoading = useSelector((state) => state.tracks.isLoading);
+  const [disabled, setDisabled] = useState(false);
+  const {
+    data: favoriteMusic = { items: [] },
+    isLoading,
+    isError,
+  } = useGetFavoriteTracksQuery({ token: tokenAccess.access });
+
+  useEffect(() => {
+    dispatch(setLoading(isLoading));
+    if (!isLoading && !isError) {
+    }
+  }, [isLoading, isError, favoriteMusic]);
+
+  
 
   useEffect(() => {
     dispatch(setSearchTerm(null));
@@ -36,26 +48,22 @@ export const Favorites = () => {
       const favoriteTracks = await getFavoriteTracks({
         token: tokenAccess.access,
       });
-      setError(false);
       if (!favoriteTracks[0]) {
-        setError('В этом плейлисте еще нет Ваших треков');
       }
       dispatch(setFavoriteTracks(favoriteTracks));
       dispatch(setAllTracks(favoriteTracks));
-      dispatch(setLoading(false));
       dispatch(setLikeState(true));
     } catch (error) {
       if (error.message === 'Токен протух') {
         const newAccess = await refreshToken(tokenRefresh);
         localStorage.setItem('tokenAccess', JSON.stringify(newAccess));
         tokenAccess = newAccess;
-        const favoriteTracks = await getFavoriteTracks({ token: newAccess.access });
+        const favoriteTracks = await getFavoriteTracks({
+          token: newAccess.access,
+        });
         dispatch(setFavoriteTracks(favoriteTracks));
         dispatch(setLoading(true));
-        setError(error.message);
       }
-    } finally {
-      dispatch(setLoading(false));
     }
   };
 
@@ -120,9 +128,7 @@ export const Favorites = () => {
           <S.TrackTitle>
             <S.TrackTitleComponent onClick={() => handleTrackClick(item)}>
               {!isLoading ? (
-                <TrackTitleSvg
-                  isCurrentPlaying={isCurrentPlaying}
-                />
+                <TrackTitleSvg isCurrentPlaying={isCurrentPlaying} />
               ) : (
                 <S.SkeletonIcon></S.SkeletonIcon>
               )}
@@ -164,17 +170,17 @@ export const Favorites = () => {
     );
   });
 
-  return ( 
-      <>
+  return (
+    <>
       <S.CenterBlockH2>Любимые треки</S.CenterBlockH2>
       <S.CenterBlockContent>
         <ContentTitle />
-        {error ? (
-          <ErrorBlock error={error} />
+        {isError ? (
+          <ErrorBlock isError={isError} />
         ) : (
           <S.ContentPlayList>{fullPlayList}</S.ContentPlayList>
         )}
       </S.CenterBlockContent>
-      </>
-    );
-  };
+    </>
+  );
+};

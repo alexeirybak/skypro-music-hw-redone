@@ -2,13 +2,12 @@ import { useSelector } from 'react-redux';
 import * as S from './styles';
 
 export const TrackTitleSvg = ({ isCurrentPlaying }) => {
-
   const isPlaying = useSelector((state) => state.tracks.isPlaying);
 
   return (
     <S.TrackTitleWrapper>
       {isCurrentPlaying ? (
-        <S.PlayingDot $isPlaying={isPlaying}/>
+        <S.PlayingDot $isPlaying={isPlaying} />
       ) : (
         <S.TrackTitleImg
           xmlns='http://www.w3.org/2000/svg'

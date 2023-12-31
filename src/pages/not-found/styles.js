@@ -1,13 +1,13 @@
 import styled from 'styled-components';
 
 export const Block404 = styled.div`
-padding: 30px 20px;
-    display: flex;
-    flex-direction: column;
-    flex-wrap: nowrap;
-    align-items: center;
-    gap: 40px;
-    background-color: var(--container);
+  padding: 30px 20px;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: 40px;
+  background-color: var(--container);
 `;
 
 export const Img = styled.img`

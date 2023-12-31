@@ -1,3 +1,4 @@
+import { useGetAllTracksQuery } from '../../store/tracksApi';
 import { useState, useEffect, useContext } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { UserContext } from '../../contexts/UserContext';
@@ -8,10 +9,9 @@ import {
   setFilter,
   setLikeState,
   setLoading,
-  setPlaying
+  setPlaying,
 } from '../../store/actions/creators/creators';
 import { addLike, disLike } from '../../api/apiGetTracks';
-import { getAllTracks } from '../../api/apiGetTracks';
 import { refreshToken } from '../../api/authApi';
 import { Filter } from '../../components/Filter';
 import { ContentTitle } from '../../components/ContentTitle';
@@ -23,42 +23,34 @@ import { ErrorBlock } from '../../components/ErrorBlock';
 import * as S from './styles';
 
 export const PlayList = () => {
+  const dispatch = useDispatch();
+  const {
+    data: allTracks = { items: [] },
+    isLoading,
+    isError,
+    refetch,
+  } = useGetAllTracksQuery();
 
-  const [error, setError] = useState(null);
+  useEffect(() => {
+    dispatch(setLoading(isLoading));
+    if (!isLoading && !isError) {
+      dispatch(setAllTracks(allTracks));
+    }
+  }, [isLoading, isError, allTracks]);
+  let music = allTracks;
+
   const [dataFilter, setDataFilter] = useState('По умолчанию');
   const [numberTracks, setNumberTracks] = useState(null);
-  const isLoading = useSelector((state) => state.tracks.isLoading);
   const isPlaying = useSelector((state) => state.tracks.isPlaying);
   const tokenRefresh = JSON.parse(localStorage.getItem('tokenRefresh'));
   const tokenAccess = JSON.parse(localStorage.getItem('tokenAccess'));
   const { user } = useContext(UserContext);
   const [disabled, setDisabled] = useState(false);
   const currentTrack = useSelector((state) => state.tracks.currentTrack);
-  let music = useSelector((state) => state.tracks.allTracks);
-
-  const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(setSearchTerm(null));
     dispatch(setFilter(null));
-  }, []);
-
-  const fetchTracks = async () => {
-    try {
-      const tracks = await getAllTracks();
-      dispatch(setAllTracks(tracks));
-      dispatch(setLoading(false));
-      setError(false);
-    } catch (error) {
-      dispatch(setLoading(true));
-      setError(error.message);
-    } finally {
-      dispatch(setLoading(false));
-    }
-  };
-
-  useEffect(() => { 
-    fetchTracks();
   }, []);
 
   if (isLoading) {
@@ -75,8 +67,6 @@ export const PlayList = () => {
         await addLike({ token: tokenAccess, id: item.id });
         dispatch(setLikeState(true));
       }
-      const response = await getAllTracks();
-      dispatch(setAllTracks(response));
     } catch (error) {
       if (error.message === 'Токен протух') {
         const newAccess = await refreshToken(tokenRefresh);
@@ -88,12 +78,11 @@ export const PlayList = () => {
           await addLike({ token: newAccess.access, id: item.id });
           dispatch(setLikeState(true));
         }
-        const response = await getAllTracks();
-        dispatch(setAllTracks(response));
         return;
       }
     } finally {
       setDisabled(false);
+      refetch();
     }
   };
 
@@ -210,8 +199,7 @@ export const PlayList = () => {
             )}
           </S.TrackAlbum>
           <S.TrackTimeComponent>
-            <S.LikeButton disabled={disabled} 
-              onClick={() => toggleLike(item)}>
+            <S.LikeButton disabled={disabled} onClick={() => toggleLike(item)}>
               <TrackLikesMainSvg isLiked={isLiked} />
             </S.LikeButton>
             <S.TrackTimeText>
@@ -225,13 +213,13 @@ export const PlayList = () => {
 
   return (
     <>
-      {error ? (
-        <ErrorBlock error={error} />
+      {isError ? (
+        <ErrorBlock isError={isError} />
       ) : (
         <>
           <S.CenterBlockH2>Треки</S.CenterBlockH2>
-          <Filter 
-            error={error}
+          <Filter
+            isError={isError}
             setDataFilter={setDataFilter}
             dataFilter={dataFilter}
             numberTracks={numberTracks}

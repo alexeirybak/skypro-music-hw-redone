@@ -6,8 +6,8 @@ import * as S from './styles';
 export const MainSidebar = () => {
   return (
     <S.MainSidebar>
-      <SidebarPersonal/>
-      <SidebarPlayLists/>
+      <SidebarPersonal />
+      <SidebarPlayLists />
     </S.MainSidebar>
   );
-}
+};

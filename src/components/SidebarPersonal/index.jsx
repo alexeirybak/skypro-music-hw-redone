@@ -1,4 +1,4 @@
-import { useContext} from 'react';
+import { useContext } from 'react';
 import { UserContext } from '../../contexts/UserContext';
 import { PersonIcon } from '../../utils/iconSVG/personIcon';
 import * as S from './styles';

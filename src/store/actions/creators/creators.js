@@ -9,7 +9,7 @@ import {
   FILTERS,
   SET_LIKE_STATE,
   SET_LOADING,
-  SET_PLAYING
+  SET_PLAYING,
 } from '../types/types';
 
 export const setAllTracks = (tracks) => ({

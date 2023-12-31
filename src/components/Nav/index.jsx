@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import { NavLink, Outlet } from 'react-router-dom';
-import { useContext} from 'react';
+import { NavLink } from 'react-router-dom';
+import { useContext } from 'react';
 import { UserContext } from '../../contexts/UserContext';
 import { SwitchTheme } from '../SwitchTheme';
 import { LogoImg } from '../../utils/iconSVG/logoImg';
@@ -32,29 +32,22 @@ export const Nav = () => {
         <S.BurgerLine></S.BurgerLine>
 
         <S.MenuContent $menuVisible={menuVisible}>
-        <S.MenuList>
-          <S.MenuItem>
-            <S.MenuLink to='/'>
-              Главное
-            </S.MenuLink>
-          </S.MenuItem>
-          <S.MenuItem>
-            <S.MenuLink to='/favorites'>
-              Мой плейлист
-            </S.MenuLink>
-          </S.MenuItem>
-          <S.MenuItem>
-            <S.MenuLink
-              to='/login'
-              onClick={handleLogout}
-            >
-              Выйти
-            </S.MenuLink>
-          </S.MenuItem>
-        </S.MenuList>
-      </S.MenuContent>
+          <S.MenuList>
+            <S.MenuItem>
+              <S.MenuLink to='/'>Главное</S.MenuLink>
+            </S.MenuItem>
+            <S.MenuItem>
+              <S.MenuLink to='/favorites'>Мой плейлист</S.MenuLink>
+            </S.MenuItem>
+            <S.MenuItem>
+              <S.MenuLink to='/login' onClick={handleLogout}>
+                Выйти
+              </S.MenuLink>
+            </S.MenuItem>
+          </S.MenuList>
+        </S.MenuContent>
       </S.NavBurger>
-      
+
       <SwitchTheme />
     </S.MainNav>
   );

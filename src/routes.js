@@ -10,9 +10,7 @@ import { UserContext } from './contexts/UserContext';
 import { PlayList } from './pages/PlayList';
 import { Layout } from './components/Layout';
 
-export const AppRoutes = ({
-  onAuthButtonClick,
-}) => {
+export const AppRoutes = ({ onAuthButtonClick }) => {
   const { user } = useContext(UserContext);
   return (
     <Routes>

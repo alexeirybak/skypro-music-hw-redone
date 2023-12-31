@@ -1,4 +1,4 @@
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { useState, useRef } from 'react';
 import { ProgressBar } from '../ProgressBar';
 import { BarPlayer } from '../BarPlayer';

@@ -1,11 +1,11 @@
+import { useGetAllTracksQuery } from '../../store/tracksApi';
 import { useState, useEffect } from 'react';
 import {
   activeTrack,
   nextTrack,
   prevTrack,
   toggleShuffled,
-  setAllTracks,
-  setPlaying
+  setPlaying,
 } from '../../store/actions/creators/creators';
 import { useDispatch, useSelector } from 'react-redux';
 import { PlayerBtnPrevSvg } from '../../utils/iconSVG/playerBtnPrev';
@@ -31,12 +31,22 @@ export const PlayerControls = ({
   const [shuffleTrackEnable, setShuffleTrackEnable] = useState(false);
   const [trackHistory, setTrackHistory] = useState([]);
   const getTrack = useSelector(activeTrack);
-  const allTracks = useSelector(setAllTracks);
   const isPlaying = useSelector((state) => state.tracks.isPlaying);
 
-  let music = allTracks.payload.tracks.tracks.allTracks;
+  const {
+    data: allTracks = { items: [] },
+    isLoading,
+    isError,
+  } = useGetAllTracksQuery();
+
+  useEffect(() => {
+    if (!isLoading && !isError) {
+    }
+  }, [isLoading, isError, allTracks]);
+  let music = allTracks;
+
   const currentTrack = getTrack.payload.track.tracks.currentTrack;
-  
+
   useEffect(() => {
     const newIndex = shuffleTrackEnable
       ? shuffledTracks.findIndex((item) => item.id === currentTrack.id)

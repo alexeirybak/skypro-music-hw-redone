@@ -1,4 +1,4 @@
-import styled, { css } from 'styled-components';
+import styled from 'styled-components';
 
 export const TrackPlayLikeImg = styled.svg`
   height: 12px;

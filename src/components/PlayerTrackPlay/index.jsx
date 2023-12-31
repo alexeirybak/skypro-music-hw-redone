@@ -1,6 +1,10 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect, useState } from 'react';
-import { activeTrack, setAllTracks, setPlaying } from '../../store/actions/creators/creators';
+import {
+  activeTrack,
+  setAllTracks,
+  setPlaying,
+} from '../../store/actions/creators/creators';
 import { getAllTracks } from '../../api/apiGetTracks';
 import { refreshToken } from '../../api/authApi';
 import { addLike } from '../../api/apiGetTracks';
@@ -10,7 +14,6 @@ import { TrackPlayLikeSvg } from '../../utils/iconSVG/trackPlayLike';
 import * as S from './styles';
 
 export const PlayerTrackPlay = () => {
-
   const isPlaying = useSelector((state) => state.tracks.isPlaying);
 
   useEffect(() => {
@@ -25,7 +28,6 @@ export const PlayerTrackPlay = () => {
   const [isLiked, setIsLiked] = useState(null);
 
   const isLikedTracks = useSelector((state) => state.tracks.isLiked);
-  console.log(isLikedTracks)
   useEffect(() => {
     if (isLikedTracks) {
       setIsLiked(true);

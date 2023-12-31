@@ -29,7 +29,6 @@ export const VolumeSvg = styled.svg`
   width: 13px;
   height: 18px;
   fill: transparent;
-  
 `;
 
 export const VolumeProgress = styled.div`
@@ -47,6 +46,6 @@ export const MutedText = styled.p`
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  margin: 0; 
+  margin: 0;
   font-size: 1.125rem;
 `;

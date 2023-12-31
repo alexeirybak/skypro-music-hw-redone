@@ -1,4 +1,3 @@
-import React from 'react';
 import { useState, useEffect } from 'react';
 import { DarkSwitcherSvg } from '../../utils/iconSVG/darkSwitcher';
 import { LightSwitcherSvg } from '../../utils/iconSVG/lightSwitcher';
@@ -7,7 +6,7 @@ import * as S from './styles.js';
 
 export const SwitchTheme = () => {
   const [currentTheme, setCurrentTheme] = useState('dark');
-  
+
   const changeTheme = () => {
     if (currentTheme === 'dark') {
       document.documentElement.setAttribute('data-theme', 'light');

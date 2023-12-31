@@ -9,7 +9,7 @@ import {
   FILTERS,
   SET_LIKE_STATE,
   SET_LOADING,
-  SET_PLAYING
+  SET_PLAYING,
 } from '../actions/types/types.js';
 
 const initialState = {
@@ -24,7 +24,7 @@ const initialState = {
   filterByGenres: [],
   isLiked: null,
   isLoading: true,
-  isPlaying: false
+  isPlaying: false,
 };
 
 export default function trackReducer(state = initialState, action) {
@@ -118,7 +118,7 @@ export default function trackReducer(state = initialState, action) {
         isPlaying,
       };
     }
-    
+
     default:
       return state;
   }

@@ -1,21 +1,28 @@
+import { useGetAllTracksQuery } from '../../store/tracksApi';
 import { useState, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { setAllTracks, setFilter } from '../../store/actions/creators/creators';
+import { useDispatch } from 'react-redux';
+import { setFilter } from '../../store/actions/creators/creators';
 import { releaseDateFormatter } from '../../utils/releaseDateFormatter';
 import * as S from './styles';
 
-export const Filter = ({
-  error,
-  setDataFilter,
-  dataFilter,
-  numberTracks,
-}) => {
+export const Filter = ({ setDataFilter, dataFilter, numberTracks }) => {
   const [openMenu, setOpenMenu] = useState('');
   const dispatch = useDispatch();
   const [selectedAuthors, setSelectedAuthors] = useState([]);
   const [selectedGenres, setSelectedGenres] = useState([]);
   const [activeAuthors, setActiveAuthors] = useState(false);
   const [activeGenres, setActiveGenres] = useState(false);
+  const {
+    data: allTracks = { items: [] },
+    isLoading,
+    isError,
+  } = useGetAllTracksQuery();
+
+  useEffect(() => {
+    if (!isLoading && !isError) {
+      console.log(allTracks);
+    }
+  }, [isLoading, isError, allTracks]);
 
   const handleAuthorClick = (author) => {
     setActiveGenres(false);
@@ -51,8 +58,7 @@ export const Filter = ({
     setOpenMenu(openMenu === menu ? '' : menu);
   };
 
-  const allTracks = useSelector(setAllTracks);
-  let music = allTracks.payload.tracks.tracks.allTracks;
+  let music = Array.isArray(allTracks) ? allTracks : [];
   const formattedAuthorList = [...new Set(music.map((item) => item.author))];
   const formattedYearList = releaseDateFormatter.map((item) => item);
   const genreList = [...new Set(music.map((item) => item.genre))];
@@ -68,7 +74,7 @@ export const Filter = ({
         <S.FilterButton
           as={openMenu === 'author' && S.BtnTextActive}
           onClick={() => handleMenuClick('author')}
-          disabled={error}
+          disabled={isLoading}
         >
           исполнителю
         </S.FilterButton>
@@ -96,7 +102,7 @@ export const Filter = ({
         <S.FilterButton
           as={openMenu === 'year' && S.BtnTextActive}
           onClick={() => toggleMenu('year')}
-          disabled={error}
+          disabled={isLoading}
         >
           году выпуска
         </S.FilterButton>
@@ -122,7 +128,7 @@ export const Filter = ({
         <S.FilterButton
           as={openMenu === 'genre' && S.BtnTextActive}
           onClick={() => handleMenuClick('genre')}
-          disabled={error}
+          disabled={isLoading}
         >
           жанру
         </S.FilterButton>

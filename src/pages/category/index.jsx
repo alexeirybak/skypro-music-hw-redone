@@ -1,16 +1,16 @@
+import { useGetCategoryTracksQuery } from '../../store/tracksApi';
 import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useContext } from 'react';
 import { UserContext } from '../../contexts/UserContext';
 import {
-  setAllTracks,
   activeTrack,
   setSearchTerm,
   setLikeState,
   setLoading,
-  setPlaying
+  setPlaying,
 } from '../../store/actions/creators/creators';
-import { addLike, disLike, getCategory } from '../../api/apiGetTracks';
+import { addLike, disLike } from '../../api/apiGetTracks';
 import { ContentTitle } from '../../components/ContentTitle';
 import { ErrorBlock } from '../../components/ErrorBlock';
 import { refreshToken } from '../../api/authApi';
@@ -27,44 +27,35 @@ export function Category() {
   const category = musicCategory.find(
     (category) => category.id === Number(params.id),
   );
+  const {
+    data: categoryMusic = { items: [] },
+    isLoading,
+    isError,
+    refetch,
+  } = useGetCategoryTracksQuery({ id: params.id });
+
+  useEffect(() => {
+    dispatch(setLoading(isLoading));
+    if (!isLoading && !isError) {
+      console.log(categoryMusic);
+    }
+  }, [isLoading, isError, categoryMusic]);
+
+  let music = categoryMusic.items;
+
   const tokenRefresh = JSON.parse(localStorage.getItem('tokenRefresh'));
   let tokenAccess = JSON.parse(localStorage.getItem('tokenAccess'));
-  const [error, setError] = useState(null);
   const { user } = useContext(UserContext);
   const [disabled, setDisabled] = useState(false);
 
   const dispatch = useDispatch();
   const symbols = useSelector((state) => state.tracks.letters);
-  const isLoading = useSelector((state) => state.tracks.isLoading);
   const isPlaying = useSelector((state) => state.tracks.isPlaying);
   const currentTrack = useSelector((state) => state.tracks.currentTrack);
-  let music = useSelector((state) => state.tracks.allTracks);
 
   useEffect(() => {
     dispatch(setSearchTerm(null));
   }, []);
-
-  const fetchTracks = async () => {
-    try {
-      const response = await getCategory({ id: params.id });
-      const newArray = response.items.map((item) => {
-        const { stared_user, ...rest } = item;
-        return { ...rest, stared_user: stared_user };
-      });
-      dispatch(setAllTracks(newArray));
-      dispatch(setLoading(false));
-      setError(false);
-    } catch (error) {
-      dispatch(setLoading(true));
-      setError(error.message);
-    } finally {
-      dispatch(setLoading(false));
-    }
-  };
-
-  useEffect(() => {
-    fetchTracks();
-  }, [params.id]);
 
   if (isLoading) {
     music = [...Array(12)].flatMap(() => tracks);
@@ -84,6 +75,7 @@ export function Category() {
       } else {
         await addLike({ token: tokenAccess, id: item.id });
         dispatch(setLikeState(true));
+        refetch();
       }
     } catch (error) {
       if (error.message === 'Токен протух') {
@@ -101,7 +93,7 @@ export function Category() {
       }
     } finally {
       setDisabled(false);
-      fetchTracks();
+      refetch();
     }
   };
 
@@ -129,9 +121,7 @@ export function Category() {
           <S.TrackTitle>
             <S.TrackTitleComponent onClick={() => handleTrackClick(item)}>
               {!isLoading ? (
-                <TrackTitleSvg
-                  isCurrentPlaying={isCurrentPlaying}
-                />
+                <TrackTitleSvg isCurrentPlaying={isCurrentPlaying} />
               ) : (
                 <S.SkeletonIcon></S.SkeletonIcon>
               )}
@@ -174,16 +164,16 @@ export function Category() {
   });
 
   return (
-      <>
-        <S.CenterBlockH2>{category.alt}</S.CenterBlockH2>
-        <S.CenterBlockContent $isPlaying={isPlaying}>
-          <ContentTitle />
-          {error ? (
-            <ErrorBlock error={error} />
-          ) : (
-            <S.ContentPlayList>{fullPlayList}</S.ContentPlayList>
-          )}
-        </S.CenterBlockContent>
-      </>
+    <>
+      <S.CenterBlockH2>{category.alt}</S.CenterBlockH2>
+      <S.CenterBlockContent $isPlaying={isPlaying}>
+        <ContentTitle />
+        {isError ? (
+          <ErrorBlock isError={isError} />
+        ) : (
+          <S.ContentPlayList>{fullPlayList}</S.ContentPlayList>
+        )}
+      </S.CenterBlockContent>
+    </>
   );
 }

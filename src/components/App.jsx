@@ -13,8 +13,7 @@ const App = () => {
     <>
       <GlobalStyle />
       <UserContext.Provider value={{ user, setUser }}>
-        <AppRoutes
-        />
+        <AppRoutes />
       </UserContext.Provider>
     </>
   );

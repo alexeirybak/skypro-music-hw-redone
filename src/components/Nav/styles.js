@@ -21,7 +21,6 @@ export const NavLogo = styled.div`
   @media screen and (max-width: 600px) {
     margin-top: 0;
   }
-
 `;
 
 export const NavBurger = styled.div`
@@ -52,7 +51,10 @@ export const MenuContent = styled.div`
     left: 30%;
     margin: 30px 0 0;
     padding: 0 15px 0 15px;
-    border: ${({ $menuVisible }) => ($menuVisible ? '1px solid var(--main-text)' : '1px solid var(--main-nav)')};
+    border: ${({ $menuVisible }) =>
+      $menuVisible
+        ? '1px solid var(--main-text)'
+        : '1px solid var(--main-nav)'};
     border-radius: 10px;
     max-height: 0;
     overflow: hidden;

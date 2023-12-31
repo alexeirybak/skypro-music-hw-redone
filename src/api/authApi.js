@@ -1,6 +1,6 @@
 const apiAddress = 'https://skypro-music-api.skyeng.tech';
 
-export async function RegUser({email, password}) {
+export async function RegUser({ email, password }) {
   return fetch(`${apiAddress}/user/signup/`, {
     method: 'POST',
     body: JSON.stringify({
@@ -79,7 +79,12 @@ export async function getToken({ email, password }) {
       'content-type': 'application/json',
     },
   });
-  return await response.json();
+
+  const data = await response.json();
+  if (response.ok) {
+    localStorage.setItem('token', data.token);
+  }
+  return data;
 }
 
 export async function refreshToken(token) {

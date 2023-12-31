@@ -1,5 +1,4 @@
 import { NavLink } from 'react-router-dom';
-import { SidebarPlayLists } from '../../components/SidebarPlayLists';
 import * as S from './styles';
 
 export const NotFound = () => {

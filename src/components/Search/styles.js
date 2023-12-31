@@ -11,7 +11,6 @@ export const CenterBlockSearch = styled.div`
   @media screen and (max-width: 768px) {
     padding-bottom: 20px;
   }
-
 `;
 
 export const Glass = styled.div`
@@ -46,5 +45,4 @@ export const SearchText = styled.input`
   @media screen and (max-width: 768px) {
     padding: 5px 5px 5px;
   }
-
 `;
